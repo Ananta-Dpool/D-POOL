@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Bell, MapPin, Search } from "lucide-react";
+import { Bell, LogIn, MapPin, Search } from "lucide-react";
+import { useAuth } from "@/lib/auth/context";
 
 interface TopHeaderProps {
   campusName?: string;
@@ -24,6 +25,7 @@ export function TopHeader({
   searchQuery = "",
   onSearchChange,
 }: TopHeaderProps) {
+  const { user } = useAuth();
   const [suggestionIdx, setSuggestionIdx] = useState(0);
 
   useEffect(() => {
@@ -64,6 +66,29 @@ export function TopHeader({
             <Bell className="w-4 h-4" />
             <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full" />
           </Link>
+
+          {/* Small Login Button or User Profile Pill beside Bell icon */}
+          {user ? (
+            <Link
+              href="/profile"
+              className="h-7 pl-1.5 pr-2.5 rounded-full bg-accent-tint border border-border/80 text-accent text-xs font-semibold flex items-center gap-1.5 hover:bg-accent-tint/80 transition-colors"
+              title={user.name}
+            >
+              <div className="w-4 h-4 rounded-full bg-accent text-surface text-[9px] font-bold flex items-center justify-center">
+                {user.name.charAt(0).toUpperCase()}
+              </div>
+              <span className="max-w-[65px] truncate text-[11px]">{user.name.split(" ")[0]}</span>
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="h-7 px-2.5 rounded-full bg-accent text-surface hover:bg-accent-hover text-xs font-semibold flex items-center gap-1 transition-all shadow-2xs"
+              title="Log in to your account"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Log in</span>
+            </Link>
+          )}
         </div>
       </div>
 

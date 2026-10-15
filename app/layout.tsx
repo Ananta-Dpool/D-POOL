@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Source_Serif_4 } from "next/font/google";
+import { AuthProvider } from "@/lib/auth/context";
 import "./globals.css";
 
 const inter = Inter({
@@ -34,9 +35,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${sourceSerif.variable}`}>
       <body className="min-h-screen bg-paper text-ink flex flex-col items-center">
-        <main className="w-full max-w-md min-h-screen bg-paper flex flex-col border-x border-border/50 relative shadow-sm">
-          {children}
-        </main>
+        <AuthProvider>
+          <main className="w-full max-w-md min-h-screen bg-paper flex flex-col border-x border-border/50 relative shadow-sm">
+            {children}
+          </main>
+        </AuthProvider>
       </body>
     </html>
   );
