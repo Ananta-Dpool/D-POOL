@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Marketplace — UI Design System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#FAF8F4',
+                        surface: '#FFFFFF',
+                        ink: '#1A1A1A',
+                        'ink-sec': '#5C5C57',
+                        'ink-ph': '#8A8A83',
+                        border: '#E4E1DA',
+                        accent: '#1F3A5F',
+                        'accent-hover': '#162B47',
+                        'accent-tint': '#E8EDF4',
+                        success: '#2F6B4F',
+                        warning: '#A86B12',
+                        danger: '#A63D2F',
+                    },
+                    fontFamily: {
+                        serif: ['"Source Serif 4"', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        '8px': '8px',
+                        '12px': '12px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #FAF8F4; color: #1A1A1A; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .font-serif { font-family: 'Source Serif 4', serif; }
+        .tnum { font-variant-numeric: tabular-nums; }
+        
+        /* Focus rings */
+        input:focus, textarea:focus, select:focus, button:focus-visible, a:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 2px #FAF8F4, 0 0 0 4px #1F3A5F;
+        }
+        
+        /* Hide scrollbar for chip row */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Screen frame styling */
+        .screen-mobile {
+            width: 360px;
+            height: 760px;
+            background: #FAF8F4;
+            border: 1px solid #E4E1DA;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .screen-desktop {
+            width: 100%;
+            max-width: 1120px;
+            height: 800px;
+            background: #FAF8F4;
+            border: 1px solid #E4E1DA;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+        }
+        
+        .skeleton {
+            background: linear-gradient(90deg, #F0EDE7 25%, #FAF8F4 50%, #F0EDE7 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .fade-in { animation: fadeIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .sheet-slide-up { animation: slideUp 0.15s ease-out; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        /* Faux status bar for mobile */
+        .status-bar {
+            height: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1A1A1A;
+            background: transparent;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-12 space-y-16">
+
+<!-- Header -->
+<header class="max-w-7xl mx-auto text-center mb-12">
+    <h1 class="font-serif text-3xl md:text-4xl font-semibold text-ink mb-2">Campus Marketplace</h1>
+    <p class="text-ink-sec max-w-2xl mx-auto">A verified, face-to-face marketplace for college students. Minimalist, study-oriented, and calm. UI design system and screen specifications.</p>
+</header>
+
+<!-- 1. CORE SCREENS: HOME FEED (Mobile & Desktop) -->
+<section id="home-feed" class="space-y-8">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="font-serif text-2xl font-semibold border-b border-border pb-4 mb-8">01. Home Feed</h2>
+    </div>
+    
+    <div class="flex flex-col lg:flex-row gap-12 justify-center items-start max-w-7xl mx-auto">
+        <!-- Mobile Home Feed -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">Mobile (360px)</span>
+            <div class="screen-mobile">
+                <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3 h-3"></i><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery-full" class="w-4 h-4"></i></span></div>
+                
+                <header class="px-4 pt-2 pb-4 flex justify-between items-center">
+                    <div>
+                        <p class="text-xs text-ink-sec">Browsing on</p>
+                        <h2 class="font-serif text-xl font-semibold leading-tight">IIT Delhi</h2>
+                    </div>
+                    <button class="relative w-10 h-10 rounded-full flex items-center justify-center text-ink hover:bg-paper">
+                        <i data-lucide="inbox" class="w-5 h-5"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full"></span>
+                    </button>
+                </header>
+                
+                <div class="px-4 pb-2">
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink-ph"></i>
+                        <input type="text" placeholder="Search textbooks, notes..." class="w-full h-12 pl-10 pr-4 border border-border rounded-8px bg-surface text-sm placeholder:text-ink-ph">
+                    </div>
+                </div>
+                
+                <div class="flex gap-2 overflow-x-auto no-scrollbar px-4 py-3">
+                    <button class="px-4 h-9 flex items-center justify-center rounded-full bg-accent text-surface text-sm font-medium whitespace-nowrap">All</button>
+                    <button class="px-4 h-9 flex items-center justify-center rounded-full border border-border text-ink text-sm font-medium whitespace-nowrap hover:bg-paper">Textbooks</button>
+                    <button class="px-4 h-9 flex items-center justify-center rounded-full border border-border text-ink text-sm font-medium whitespace-nowrap hover:bg-paper">Notes</button>
+                    <button class="px-4 h-9 flex items-center justify-center rounded-full border border-border text-ink text-sm font-medium whitespace-nowrap hover:bg-paper">Electronics</button>
+                    <button class="px-4 h-9 flex items-center justify-center rounded-full border border-border text-ink text-sm font-medium whitespace-nowrap hover:bg-paper">Hostel</button>
+                </div>
+
+                <div class="flex justify-between items-center px-4 py-2 border-b border-border">
+                    <button class="flex items-center gap-1 text-sm font-medium text-ink hover:text-accent">
+                        Newest <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div class="flex border border-border rounded-8px overflow-hidden">
+                        <button class="p-2 bg-paper text-accent"><i data-lucide="list" class="w-4 h-4"></i></button>
+                        <button class="p-2 text-ink-ph hover:text-ink"><i data-lucide="grid" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto pb-24">
+                    <!-- Listing Item -->
+                    <a href="#" class="flex p-4 gap-4 border-b border-border hover:bg-paper transition-colors">
+                        <img src="https://placehold.co/96x96/F4F1EC/8A8A83?text=Book" class="w-24 h-24 rounded-12px object-cover" alt="Item">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-ink text-sm font-medium leading-tight line-clamp-2">Engineering Mathematics - Vol 1</h3>
+                            <p class="font-semibold text-accent tnum mt-1 text-base">₹450</p>
+                            <p class="text-xs text-ink-sec mt-1">Good · Textbook · 2h ago</p>
+                        </div>
+                    </a>
+                    <!-- Listing Item -->
+                    <a href="#" class="flex p-4 gap-4 border-b border-border hover:bg-paper transition-colors">
+                        <img src="https://placehold.co/96x96/F4F1EC/8A8A83?text=Calc" class="w-24 h-24 rounded-12px object-cover" alt="Item">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-ink text-sm font-medium leading-tight line-clamp-2">Casio FX-991ES Plus Scientific Calculator</h3>
+                            <p class="font-semibold text-accent tnum mt-1 text-base">₹350</p>
+                            <p class="text-xs text-ink-sec mt-1">Like new · Electronics · 5h ago</p>
+                        </div>
+                    </a>
+                    <!-- Listing Item -->
+                    <a href="#" class="flex p-4 gap-4 border-b border-border hover:bg-paper transition-colors">
+                        <img src="https://placehold.co/96x96/F4F1EC/8A8A83?text=Desk" class="w-24 h-24 rounded-12px object-cover" alt="Item">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-ink text-sm font-medium leading-tight line-clamp-2">Wooden Hostel Study Table Lamp</h3>
+                            <p class="font-semibold text-accent tnum mt-1 text-base">₹600</p>
+                            <p class="text-xs text-ink-sec mt-1">Fair · Hostel · 1d ago</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Bottom Tab Bar -->
+                <nav class="absolute bottom-0 left-0 right-0 bg-surface border-t border-border flex justify-around items-center h-16 px-2 pb-2 pt-2">
+                    <button class="flex flex-col items-center text-accent gap-1 text-xs font-medium w-16">
+                        <i data-lucide="home" class="w-5 h-5"></i> Home
+                    </button>
+                    <button class="flex flex-col items-center text-ink-sec gap-1 text-xs font-medium w-16 hover:text-ink">
+                        <i data-lucide="search" class="w-5 h-5"></i> Search
+                    </button>
+                    <button class="flex flex-col items-center gap-1 text-xs font-medium w-16">
+                        <span class="px-4 py-2 bg-accent text-surface rounded-full text-xs font-semibold hover:bg-accent-hover transition-colors">Sell</span>
+                    </button>
+                    <button class="flex flex-col items-center text-ink-sec gap-1 text-xs font-medium w-16 hover:text-ink relative">
+                        <i data-lucide="message-square" class="w-5 h-5"></i> Chats
+                        <span class="absolute top-0 right-3 w-2 h-2 bg-danger rounded-full"></span>
+                    </button>
+                    <button class="flex flex-col items-center text-ink-sec gap-1 text-xs font-medium w-16 hover:text-ink">
+                        <i data-lucide="user" class="w-5 h-5"></i> Profile
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Desktop Home Feed -->
+        <div class="flex flex-col items-center w-full lg:w-auto">
+            <span class="text-sm font-medium text-ink-sec mb-4">Desktop (1120px)</span>
+            <div class="screen-desktop">
+                <header class="h-16 border-b border-border flex items-center justify-between px-8 bg-surface">
+                    <div class="font-serif text-xl font-semibold">Campus Market</div>
+                    
+                    <div class="relative w-1/3">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink-ph"></i>
+                        <input type="text" placeholder="Search items..." class="w-full h-10 pl-10 pr-4 border border-border rounded-8px bg-paper text-sm placeholder:text-ink-ph">
+                    </div>
+                    
+                    <div class="flex items-center gap-6">
+                        <button class="h-10 px-5 bg-accent text-surface rounded-8px text-sm font-medium hover:bg-accent-hover transition-colors flex items-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Sell
+                        </button>
+                        <button class="text-ink hover:text-accent relative">
+                            <i data-lucide="message-square" class="w-5 h-5"></i>
+                            <span class="absolute -top-1 -right-1 w-2 h-2 bg-danger rounded-full"></span>
+                        </button>
+                        <button class="text-ink hover:text-accent">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </header>
+                
+                <div class="flex-1 overflow-y-auto p-8">
+                    <div class="mb-6">
+                        <h2 class="font-serif text-3xl font-semibold mb-1">IIT Delhi</h2>
+                        <p class="text-ink-sec text-sm">55 active listings on your campus</p>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mb-8 pb-4 border-b border-border">
+                        <div class="flex gap-2">
+                            <button class="px-4 h-9 flex items-center justify-center rounded-full bg-accent text-surface text-sm font-medium hover:bg-accent-hover">All</button>
+                            <button class="px-4 h-9 flex items-center justify-center rounded-full border border-border text-ink text-sm font-medium hover:bg-paper">Textbooks</button>
+                            <button class="px-4 h-9 flex items-center justify-center rounded-full border border-border text-ink text-sm font-medium hover:bg-paper">Notes</button>
+                            <button class="px-4 h-9 flex items-center justify-center rounded-full border border-border text-ink text-sm font-medium hover:bg-paper">Electronics</button>
+                            <button class="px-4 h-9 flex items-center justify-center rounded-full border border-border text-ink text-sm font-medium hover:bg-paper">Hostel</button>
+                            <button class="px-4 h-9 flex items-center justify-center rounded-full border border-border text-ink text-sm font-medium hover:bg-paper">Project materials</button>
+                            <button class="px-4 h-9 flex items-center justify-center rounded-full border border-border text-ink text-sm font-medium hover:bg-paper">Handmade</button>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <button class="flex items-center gap-1 text-sm font-medium text-ink hover:text-accent">
+                                Newest <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </button>
+                            <div class="flex border border-border rounded-8px overflow-hidden">
+                                <button class="p-2 bg-paper text-accent"><i data-lucide="list" class="w-4 h-4"></i></button>
+                                <button class="p-2 text-ink-ph hover:text-ink"><i data-lucide="grid" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grid View on Desktop -->
+                    <div class="grid grid-cols-4 gap-6">
+                        <!-- Listing Card -->
+                        <a href="#" class="block group">
+                            <div class="aspect-[4/3] mb-3 rounded-12px overflow-hidden bg-paper border border-border">
+                                <img src="https://placehold.co/400x300/F4F1EC/8A8A83?text=Book" class="w-full h-full object-cover group-hover:opacity-90 transition-opacity" alt="Item">
+                            </div>
+                            <h3 class="text-ink text-sm font-medium leading-tight line-clamp-2 group-hover:text-accent">Engineering Mathematics - Vol 1</h3>
+                            <p class="font-semibold text-accent tnum mt-1 text-base">₹450</p>
+                            <p class="text-xs text-ink-sec mt-1">Good · Textbook · 2h ago</p>
+                        </a>
+                        <a href="#" class="block group">
+                            <div class="aspect-[4/3] mb-3 rounded-12px overflow-hidden bg-paper border border-border">
+                                <img src="https://placehold.co/400x300/F4F1EC/8A8A83?text=Calc" class="w-full h-full object-cover group-hover:opacity-90 transition-opacity" alt="Item">
+                            </div>
+                            <h3 class="text-ink text-sm font-medium leading-tight line-clamp-2 group-hover:text-accent">Casio FX-991ES Plus Scientific Calculator</h3>
+                            <p class="font-semibold text-accent tnum mt-1 text-base">₹350</p>
+                            <p class="text-xs text-ink-sec mt-1">Like new · Electronics · 5h ago</p>
+                        </a>
+                        <a href="#" class="block group">
+                            <div class="aspect-[4/3] mb-3 rounded-12px overflow-hidden bg-paper border border-border">
+                                <img src="https://placehold.co/400x300/F4F1EC/8A8A83?text=Desk" class="w-full h-full object-cover group-hover:opacity-90 transition-opacity" alt="Item">
+                            </div>
+                            <h3 class="text-ink text-sm font-medium leading-tight line-clamp-2 group-hover:text-accent">Wooden Hostel Study Table Lamp</h3>
+                            <p class="font-semibold text-accent tnum mt-1 text-base">₹600</p>
+                            <p class="text-xs text-ink-sec mt-1">Fair · Hostel · 1d ago</p>
+                        </a>
+                        <a href="#" class="block group">
+                            <div class="aspect-[4/3] mb-3 rounded-12px overflow-hidden bg-paper border border-border">
+                                <img src="https://placehold.co/400x300/F4F1EC/8A8A83?text=Draft" class="w-full h-full object-cover group-hover:opacity-90 transition-opacity" alt="Item">
+                            </div>
+                            <h3 class="text-ink text-sm font-medium leading-tight line-clamp-2 group-hover:text-accent">A0 Drawing Sheet Bundle (50 pcs)</h3>
+                            <p class="font-semibold text-accent tnum mt-1 text-base">₹250</p>
+                            <p class="text-xs text-ink-sec mt-1">Good · Project materials · 1d ago</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2. CORE SCREENS: LISTING DETAIL (Mobile & Desktop) -->
+<section id="listing-detail" class="space-y-8">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="font-serif text-2xl font-semibold border-b border-border pb-4 mb-8">02. Listing Detail</h2>
+    </div>
+    
+    <div class="flex flex-col lg:flex-row gap-12 justify-center items-start max-w-7xl mx-auto">
+        <!-- Mobile Listing Detail -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">Mobile (360px)</span>
+            <div class="screen-mobile">
+                <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3 h-3"></i><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery-full" class="w-4 h-4"></i></span></div>
+                
+                <header class="px-4 py-3 flex justify-between items-center bg-surface border-b border-border">
+                    <button class="w-10 h-10 flex items-center justify-center text-ink hover:bg-paper rounded-full"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                    <button class="text-sm text-ink-sec hover:text-ink font-medium">Report</button>
+                </header>
+
+                <div class="flex-1 overflow-y-auto pb-24">
+                    <div class="relative aspect-[4/3] bg-paper border-b border-border">
+                        <img src="https://placehold.co/600x450/F4F1EC/8A8A83?text=Engineering+Maths" class="w-full h-full object-cover" alt="Item">
+                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-surface"></span>
+                            <span class="w-2 h-2 rounded-full bg-surface/50"></span>
+                            <span class="w-2 h-2 rounded-full bg-surface/50"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 space-y-4">
+                        <div>
+                            <h1 class="font-serif text-xl font-semibold leading-tight text-ink">Engineering Mathematics - Vol 1</h1>
+                            <p class="font-semibold text-accent tnum text-2xl mt-2">₹450</p>
+                            <p class="text-xs text-ink-sec mt-1">Good · Textbook · 2h ago</p>
+                        </div>
+                        
+                        <div class="border-t border-border pt-4">
+                            <p class="text-sm text-ink font-medium mb-2">Study details</p>
+                            <p class="text-sm text-ink-sec">Mathematics · Semester 1 · Edition 2020</p>
+                        </div>
+                        
+                        <div class="border-t border-border pt-4">
+                            <p class="text-sm text-ink font-medium mb-2">Description</p>
+                            <p class="text-sm text-ink-sec leading-relaxed">Barely used, no highlights or markings. Includes the solution manual. Selling because I passed the course last semester.</p>
+                        </div>
+                        
+                        <div class="border-t border-border pt-4 flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-accent-tint flex items-center justify-center text-accent font-medium">A</div>
+                            <div>
+                                <p class="text-sm font-medium text-ink flex items-center gap-1">Aarav Sharma</p>
+                                <p class="text-xs text-success flex items-center gap-1"><i data-lucide="badge-check" class="w-3 h-3"></i> Verified student · IIT Delhi</p>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-border pt-4 flex items-start gap-2 text-xs text-ink-sec">
+                            <i data-lucide="info" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <p>Meet in a public, well-lit place on campus.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="absolute bottom-0 left-0 right-0 bg-surface border-t border-border p-4">
+                    <button class="w-full h-12 bg-accent text-surface rounded-8px font-medium text-sm hover:bg-accent-hover transition-colors">Message seller</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop Listing Detail -->
+        <div class="flex flex-col items-center w-full lg:w-auto">
+            <span class="text-sm font-medium text-ink-sec mb-4">Desktop (1120px)</span>
+            <div class="screen-desktop">
+                <header class="h-16 border-b border-border flex items-center justify-between px-8 bg-surface">
+                    <div class="font-serif text-xl font-semibold">Campus Market</div>
+                    <div class="relative w-1/3">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink-ph"></i>
+                        <input type="text" placeholder="Search items..." class="w-full h-10 pl-10 pr-4 border border-border rounded-8px bg-paper text-sm placeholder:text-ink-ph">
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <button class="h-10 px-5 bg-accent text-surface rounded-8px text-sm font-medium hover:bg-accent-hover flex items-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Sell
+                        </button>
+                        <button class="text-ink hover:text-accent relative">
+                            <i data-lucide="message-square" class="w-5 h-5"></i>
+                        </button>
+                        <button class="text-ink hover:text-accent">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </header>
+
+                <div class="flex-1 overflow-y-auto p-8 grid grid-cols-2 gap-12">
+                    <div>
+                        <div class="aspect-[4/3] rounded-12px overflow-hidden bg-paper border border-border">
+                            <img src="https://placehold.co/800x600/F4F1EC/8A8A83?text=Engineering+Maths" class="w-full h-full object-cover" alt="Item">
+                        </div>
+                        <div class="flex gap-2 mt-4">
+                            <div class="w-20 h-20 rounded-8px border-2 border-accent overflow-hidden">
+                                <img src="https://placehold.co/100x100/F4F1EC/8A8A83?text=Book" class="w-full h-full object-cover" alt="Thumb">
+                            </div>
+                            <div class="w-20 h-20 rounded-8px border border-border overflow-hidden opacity-60 hover:opacity-100 cursor-pointer">
+                                <img src="https://placehold.co/100x100/F4F1EC/8A8A83?text=Back" class="w-full h-full object-cover" alt="Thumb">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <h1 class="font-serif text-3xl font-semibold leading-tight text-ink">Engineering Mathematics - Vol 1</h1>
+                        <p class="font-semibold text-accent tnum text-3xl mt-3">₹450</p>
+                        <p class="text-sm text-ink-sec mt-2">Good · Textbook · 2h ago</p>
+                        
+                        <div class="border-t border-border mt-6 pt-6">
+                            <p class="text-sm text-ink font-medium mb-2">Study details</p>
+                            <p class="text-sm text-ink-sec">Mathematics · Semester 1 · Edition 2020</p>
+                        </div>
+                        
+                        <div class="border-t border-border mt-6 pt-6">
+                            <p class="text-sm text-ink font-medium mb-2">Description</p>
+                            <p class="text-sm text-ink-sec leading-relaxed">Barely used, no highlights or markings. Includes the solution manual. Selling because I passed the course last semester.</p>
+                        </div>
+
+                        <div class="border-t border-border mt-6 pt-6 flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-accent-tint flex items-center justify-center text-accent font-medium">A</div>
+                            <div>
+                                <p class="text-sm font-medium text-ink">Aarav Sharma</p>
+                                <p class="text-xs text-success flex items-center gap-1"><i data-lucide="badge-check" class="w-3 h-3"></i> Verified student · IIT Delhi</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto pt-8 border-t border-border">
+                             <div class="p-4 border border-border rounded-12px mb-4 flex items-start gap-2 text-xs text-ink-sec bg-paper">
+                                <i data-lucide="info" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                                <p>Meet in a public, well-lit place on campus. Never pay in advance.</p>
+                            </div>
+                            <div class="flex gap-4">
+                                <button class="flex-1 h-12 bg-accent text-surface rounded-8px font-medium text-sm hover:bg-accent-hover transition-colors">Message seller</button>
+                                <button class="h-12 px-6 border border-border text-ink rounded-8px font-medium text-sm hover:bg-paper transition-colors flex items-center gap-2">
+                                    <i data-lucide="bookmark" class="w-4 h-4"></i> Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. CORE SCREENS: CHAT THREAD (Mobile & Desktop) -->
+<section id="chat-thread" class="space-y-8">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="font-serif text-2xl font-semibold border-b border-border pb-4 mb-8">03. Chat Thread & Deal Card</h2>
+    </div>
+    
+    <div class="flex flex-col lg:flex-row gap-12 justify-center items-start max-w-7xl mx-auto">
+        <!-- Mobile Chat Thread -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">Mobile (360px)</span>
+            <div class="screen-mobile">
+                <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3 h-3"></i><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery-full" class="w-4 h-4"></i></span></div>
+                
+                <header class="px-4 py-3 flex items-center justify-between border-b border-border bg-surface">
+                    <button class="text-ink hover:bg-paper rounded-full p-1"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-full bg-accent-tint flex items-center justify-center text-accent text-xs font-medium">A</div>
+                        <div>
+                            <p class="text-sm font-medium text-ink leading-none">Aarav Sharma</p>
+                            <p class="text-xs text-success flex items-center gap-1 mt-0.5"><i data-lucide="badge-check" class="w-3 h-3"></i> Verified</p>
+                        </div>
+                    </div>
+                    <button class="text-ink-sec hover:text-ink p-1"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                </header>
+                
+                <!-- Pinned Listing -->
+                <div class="p-3 bg-paper border-b border-border flex gap-3 items-center">
+                    <img src="https://placehold.co/40x40/F4F1EC/8A8A83?text=B" class="w-10 h-10 rounded-8px object-cover" alt="Item">
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs text-ink font-medium truncate">Engineering Mathematics - Vol 1</p>
+                        <p class="text-xs text-accent tnum font-medium">₹450</p>
+                    </div>
+                    <button class="text-xs text-ink-sec underline hover:text-ink">View</button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-4 space-y-3 bg-paper pb-24">
+                    <!-- Other person's message -->
+                    <div class="flex flex-col items-start">
+                        <div class="bg-surface border border-border rounded-12px rounded-tl-sm p-3 max-w-[80%]">
+                            <p class="text-sm text-ink">Hi, is the maths book still available?</p>
+                        </div>
+                        <span class="text-xs text-ink-ph mt-1">10:15 AM</span>
+                    </div>
+                    
+                    <!-- Own message -->
+                    <div class="flex flex-col items-end">
+                        <div class="bg-accent-tint border border-transparent rounded-12px rounded-tr-sm p-3 max-w-[80%]">
+                            <p class="text-sm text-ink">Yes it is. Barely used.</p>
+                        </div>
+                        <span class="text-xs text-ink-ph mt-1">10:16 AM</span>
+                    </div>
+
+                    <!-- Make a deal button -->
+                    <button class="w-full mt-2 h-10 border border-accent text-accent rounded-8px text-sm font-medium hover:bg-accent-tint transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="handshake" class="w-4 h-4"></i> Make a deal
+                    </button>
+
+                    <!-- Deal Card -->
+                    <div class="w-full border border-border rounded-12px bg-surface p-4 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-medium text-ink-sec uppercase tracking-wider">Deal Status</span>
+                            <span class="text-xs text-accent font-medium flex items-center gap-1 bg-accent-tint px-2 py-1 rounded-full">
+                                <span class="w-1.5 h-1.5 bg-accent rounded-full"></span> Meetup set
+                            </span>
+                        </div>
+                        
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between"><span class="text-ink-sec">Item</span><span class="text-ink font-medium text-right">Engineering Maths Vol 1</span></div>
+                            <div class="flex justify-between"><span class="text-ink-sec">Price</span><span class="text-ink font-medium tnum">₹450</span></div>
+                            <div class="flex justify-between"><span class="text-ink-sec">Payment</span><span class="text-ink font-medium">Cash</span></div>
+                            <div class="flex justify-between"><span class="text-ink-sec">Meetup</span><span class="text-ink font-medium text-right">Library Steps, Block A</span></div>
+                            <div class="flex justify-between"><span class="text-ink-sec">Time</span><span class="text-ink font-medium text-right">Tomorrow, 4:00 PM</span></div>
+                        </div>
+                        
+                        <div class="flex gap-2 pt-3 border-t border-border">
+                            <button class="flex-1 h-10 bg-accent text-surface rounded-8px text-xs font-medium hover:bg-accent-hover">Mark complete</button>
+                            <button class="flex-1 h-10 border border-border text-ink rounded-8px text-xs font-medium hover:bg-paper">Cancel</button>
+                        </div>
+                    </div>
+
+                    <!-- Failed message -->
+                    <div class="flex flex-col items-end">
+                        <div class="bg-accent-tint border border-transparent rounded-12px rounded-tr-sm p-3 max-w-[80%]">
+                            <p class="text-sm text-ink">I'll bring exact change.</p>
+                        </div>
+                        <span class="text-xs text-danger mt-1 flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i> Not sent · Retry</span>
+                    </div>
+                </div>
+
+                <!-- Composer -->
+                <div class="absolute bottom-0 left-0 right-0 bg-surface border-t border-border p-3 flex items-center gap-2">
+                    <input type="text" placeholder="Message..." class="flex-1 h-10 px-4 border border-border rounded-full bg-paper text-sm placeholder:text-ink-ph">
+                    <button class="w-10 h-10 bg-accent text-surface rounded-full flex items-center justify-center hover:bg-accent-hover"><i data-lucide="send" class="w-4 h-4"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop Chat Thread -->
+        <div class="flex flex-col items-center w-full lg:w-auto">
+            <span class="text-sm font-medium text-ink-sec mb-4">Desktop (1120px)</span>
+            <div class="screen-desktop">
+                <header class="h-16 border-b border-border flex items-center justify-between px-8 bg-surface">
+                    <div class="font-serif text-xl font-semibold">Campus Market</div>
+                    <div class="relative w-1/3">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink-ph"></i>
+                        <input type="text" placeholder="Search items..." class="w-full h-10 pl-10 pr-4 border border-border rounded-8px bg-paper text-sm placeholder:text-ink-ph">
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <button class="h-10 px-5 bg-accent text-surface rounded-8px text-sm font-medium hover:bg-accent-hover flex items-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Sell
+                        </button>
+                        <button class="text-ink hover:text-accent relative">
+                            <i data-lucide="message-square" class="w-5 h-5"></i>
+                        </button>
+                        <button class="text-ink hover:text-accent">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </header>
+                
+                <div class="flex-1 flex overflow-hidden">
+                    <!-- Chat List Sidebar -->
+                    <div class="w-1/3 border-r border-border overflow-y-auto">
+                        <div class="p-4 border-b border-border">
+                            <h2 class="font-serif text-xl font-semibold">Chats</h2>
+                        </div>
+                        <!-- Chat List Item -->
+                        <div class="p-4 border-b border-border bg-paper flex items-center gap-3 cursor-pointer">
+                            <div class="w-10 h-10 rounded-full bg-accent-tint flex items-center justify-center text-accent text-xs font-medium">A</div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex justify-between"><p class="text-sm font-medium text-ink">Aarav Sharma</p><span class="text-xs text-ink-ph">10:15 AM</span></div>
+                                <p class="text-xs text-ink-sec truncate">I'll bring exact change.</p>
+                            </div>
+                        </div>
+                        <div class="p-4 border-b border-border flex items-center gap-3 cursor-pointer hover:bg-paper">
+                            <div class="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning text-xs font-medium">P</div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex justify-between"><p class="text-sm font-medium text-ink">Priya Singh</p><span class="text-xs text-ink-ph">Yesterday</span></div>
+                                <p class="text-xs text-ink-sec truncate">Is the calculator working?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Thread -->
+                    <div class="flex-1 flex flex-col bg-paper">
+                        <header class="h-16 border-b border-border flex items-center justify-between px-6 bg-surface">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-accent-tint flex items-center justify-center text-accent text-sm font-medium">A</div>
+                                <div>
+                                    <p class="text-sm font-medium text-ink leading-none">Aarav Sharma</p>
+                                    <p class="text-xs text-success flex items-center gap-1 mt-1"><i data-lucide="badge-check" class="w-3 h-3"></i> Verified student · IIT Delhi</p>
+                                </div>
+                            </div>
+                        </header>
+                        
+                        <div class="p-4 border-b border-paper flex gap-3 items-center bg-surface">
+                            <img src="https://placehold.co/40x40/F4F1EC/8A8A83?text=B" class="w-12 h-12 rounded-8px object-cover" alt="Item">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm text-ink font-medium truncate">Engineering Mathematics - Vol 1</p>
+                                <p class="text-sm text-accent tnum font-medium">₹450</p>
+                            </div>
+                            <button class="text-sm text-ink-sec underline hover:text-ink">View listing</button>
+                        </div>
+
+                        <div class="flex-1 overflow-y-auto p-8 space-y-4">
+                            <div class="flex flex-col items-start">
+                                <div class="bg-surface border border-border rounded-12px rounded-tl-sm p-4 max-w-[60%]">
+                                    <p class="text-sm text-ink">Hi, is the maths book still available?</p>
+                                </div>
+                                <span class="text-xs text-ink-ph mt-1">10:15 AM</span>
+                            </div>
+                            
+                            <div class="flex flex-col items-end">
+                                <div class="bg-accent-tint border border-transparent rounded-12px rounded-tr-sm p-4 max-w-[60%]">
+                                    <p class="text-sm text-ink">Yes it is. Barely used.</p>
+                                </div>
+                                <span class="text-xs text-ink-ph mt-1">10:16 AM</span>
+                            </div>
+
+                            <button class="mt-2 h-10 px-6 border border-accent text-accent rounded-8px text-sm font-medium hover:bg-accent-tint transition-colors flex items-center justify-center gap-2">
+                                <i data-lucide="handshake" class="w-4 h-4"></i> Make a deal
+                            </button>
+
+                            <div class="w-full max-w-md border border-border rounded-12px bg-surface p-6 space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-medium text-ink-sec uppercase tracking-wider">Deal Status</span>
+                                    <span class="text-xs text-accent font-medium flex items-center gap-1 bg-accent-tint px-2 py-1 rounded-full">
+                                        <span class="w-1.5 h-1.5 bg-accent rounded-full"></span> Meetup set
+                                    </span>
+                                </div>
+                                <div class="space-y-3 text-sm">
+                                    <div class="flex justify-between"><span class="text-ink-sec">Item</span><span class="text-ink font-medium text-right">Engineering Maths Vol 1</span></div>
+                                    <div class="flex justify-between"><span class="text-ink-sec">Price</span><span class="text-ink font-medium tnum">₹450</span></div>
+                                    <div class="flex justify-between"><span class="text-ink-sec">Payment</span><span class="text-ink font-medium">Cash</span></div>
+                                    <div class="flex justify-between"><span class="text-ink-sec">Meetup</span><span class="text-ink font-medium text-right">Library Steps, Block A</span></div>
+                                    <div class="flex justify-between"><span class="text-ink-sec">Time</span><span class="text-ink font-medium text-right">Tomorrow, 4:00 PM</span></div>
+                                </div>
+                                <div class="flex gap-2 pt-4 border-t border-border">
+                                    <button class="flex-1 h-10 bg-accent text-surface rounded-8px text-xs font-medium hover:bg-accent-hover">Mark complete</button>
+                                    <button class="flex-1 h-10 border border-border text-ink rounded-8px text-xs font-medium hover:bg-paper">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-surface border-t border-border p-4 flex items-center gap-3">
+                            <input type="text" placeholder="Message Aarav..." class="flex-1 h-12 px-4 border border-border rounded-8px bg-paper text-sm placeholder:text-ink-ph">
+                            <button class="w-12 h-12 bg-accent text-surface rounded-8px flex items-center justify-center hover:bg-accent-hover"><i data-lucide="send" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- 4. SIGN-IN & ONBOARDING STATES -->
+<section id="signin" class="space-y-8">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="font-serif text-2xl font-semibold border-b border-border pb-4 mb-8">04. Sign-in & Onboarding</h2>
+    </div>
+    
+    <div class="flex flex-wrap gap-8 justify-center items-start max-w-7xl mx-auto">
+        <!-- Sign-in Email -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">1. Sign in</span>
+            <div class="screen-mobile items-center justify-center p-8">
+                <div class="w-full flex flex-col items-center text-center space-y-6 mb-8">
+                    <div class="w-16 h-16 border border-border rounded-12px flex items-center justify-center text-accent"><i data-lucide="book-open" class="w-8 h-8"></i></div>
+                    <div>
+                        <h1 class="font-serif text-2xl font-semibold mb-2">Campus Marketplace</h1>
+                        <p class="text-sm text-ink-sec">Sign in with your college email to verify your student status.</p>
+                    </div>
+                </div>
+                <div class="w-full space-y-4">
+                    <div>
+                        <label class="text-xs font-medium text-ink-sec mb-1 block">College email</label>
+                        <input type="email" value="aarav.s@iitd.ac.in" class="w-full h-12 px-4 border border-border rounded-8px bg-surface text-sm text-ink tnum">
+                    </div>
+                    <button class="w-full h-12 bg-accent text-surface rounded-8px font-medium text-sm hover:bg-accent-hover">Continue</button>
+                    <p class="text-xs text-ink-sec text-center">We’ll never show your email address on your profile.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign-in OTP -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">2. OTP Verification</span>
+            <div class="screen-mobile items-center justify-center p-8">
+                <div class="w-full flex flex-col items-center text-center space-y-6 mb-8">
+                    <div class="w-16 h-16 border border-border rounded-12px flex items-center justify-center text-accent"><i data-lucide="shield-check" class="w-8 h-8"></i></div>
+                    <div>
+                        <h1 class="font-serif text-2xl font-semibold mb-2">Enter code</h1>
+                        <p class="text-sm text-ink-sec">We sent a 6-digit code to <br><span class="text-ink font-medium">aarav.s@iitd.ac.in</span></p>
+                    </div>
+                </div>
+                <div class="w-full space-y-4">
+                    <div class="flex justify-between gap-2">
+                        <input type="text" maxlength="1" value="4" class="w-12 h-12 border border-border rounded-8px text-center text-lg tnum font-semibold">
+                        <input type="text" maxlength="1" value="2" class="w-12 h-12 border border-border rounded-8px text-center text-lg tnum font-semibold">
+                        <input type="text" maxlength="1" value="9" class="w-12 h-12 border border-border rounded-8px text-center text-lg tnum font-semibold">
+                        <input type="text" maxlength="1" placeholder="-" class="w-12 h-12 border border-border rounded-8px text-center text-lg tnum font-semibold text-ink-ph focus:border-accent">
+                        <input type="text" maxlength="1" placeholder="-" class="w-12 h-12 border border-border rounded-8px text-center text-lg tnum font-semibold text-ink-ph focus:border-accent">
+                        <input type="text" maxlength="1" placeholder="-" class="w-12 h-12 border border-border rounded-8px text-center text-lg tnum font-semibold text-ink-ph focus:border-accent">
+                    </div>
+                    <button class="w-full h-12 bg-accent text-surface rounded-8px font-medium text-sm hover:bg-accent-hover">Verify & continue</button>
+                    <button class="w-full text-center text-sm text-accent hover:underline">Resend code</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campus Confirmation -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">3. Campus confirmation</span>
+            <div class="screen-mobile items-center justify-center p-8">
+                <div class="w-full flex flex-col items-center text-center space-y-6 mb-8">
+                    <div class="w-16 h-16 border border-border rounded-12px flex items-center justify-center text-success"><i data-lucide="check-circle" class="w-8 h-8"></i></div>
+                    <div>
+                        <h1 class="font-serif text-2xl font-semibold mb-2">Confirm campus</h1>
+                        <p class="text-sm text-ink-sec">Is this your current campus?</p>
+                    </div>
+                </div>
+                <div class="w-full space-y-4">
+                    <div class="p-4 border border-border rounded-12px flex items-center gap-3 bg-surface">
+                        <div class="w-10 h-10 rounded-full bg-accent-tint flex items-center justify-center text-accent text-xs font-medium">IIT</div>
+                        <div>
+                            <p class="text-sm font-medium text-ink">IIT Delhi</p>
+                            <p class="text-xs text-ink-sec">Main campus, Hauz Khas</p>
+                        </div>
+                    </div>
+                    <button class="w-full h-12 bg-accent text-surface rounded-8px font-medium text-sm hover:bg-accent-hover">Yes, continue</button>
+                    <button class="w-full text-center text-sm text-accent hover:underline">This isn’t my campus</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Not Recognised -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">4. Email not recognised</span>
+            <div class="screen-mobile items-center justify-center p-8">
+                <div class="w-full flex flex-col items-center text-center space-y-6 mb-8">
+                    <div class="w-16 h-16 border border-border rounded-12px flex items-center justify-center text-warning"><i data-lucide="mail-question" class="w-8 h-8"></i></div>
+                    <div>
+                        <h1 class="font-serif text-2xl font-semibold mb-2">Email not recognised</h1>
+                        <p class="text-sm text-ink-sec">We couldn’t find <span class="text-ink font-medium">aarav@gmail.com</span> in our college database.</p>
+                    </div>
+                </div>
+                <div class="w-full space-y-4">
+                    <button class="w-full h-12 bg-accent text-surface rounded-8px font-medium text-sm hover:bg-accent-hover">Try another email</button>
+                    <button class="w-full h-12 border border-border text-ink rounded-8px font-medium text-sm hover:bg-paper">Request manual review</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Verification Pending -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">5. Verification pending</span>
+            <div class="screen-mobile">
+                <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3 h-3"></i><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery-full" class="w-4 h-4"></i></span></div>
+                <header class="px-4 pt-2 pb-4 flex justify-between items-center">
+                    <div>
+                        <p class="text-xs text-ink-sec">Browsing on</p>
+                        <h2 class="font-serif text-xl font-semibold leading-tight">IIT Delhi</h2>
+                    </div>
+                    <button class="relative w-10 h-10 rounded-full flex items-center justify-center text-ink hover:bg-paper">
+                        <i data-lucide="inbox" class="w-5 h-5"></i>
+                    </button>
+                </header>
+                <div class="px-4 py-3 bg-accent-tint border-y border-transparent text-accent text-xs flex items-center gap-2 font-medium">
+                    <i data-lucide="loader" class="w-4 h-4"></i> Verification pending. Browsing enabled.
+                </div>
+                
+                <div class="flex-1 overflow-y-auto pb-24 pt-2">
+                    <div class="p-4 border-b border-border flex gap-3">
+                        <img src="https://placehold.co/96x96/F4F1EC/8A8A83?text=Book" class="w-24 h-24 rounded-12px object-cover" alt="Item">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-ink text-sm font-medium leading-tight">Engineering Mathematics - Vol 1</h3>
+                            <p class="font-semibold text-accent tnum mt-1 text-base">₹450</p>
+                            <p class="text-xs text-ink-sec mt-1">Good · Textbook · 2h ago</p>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="absolute bottom-0 left-0 right-0 bg-surface border-t border-border flex justify-around items-center h-16 px-2 pb-2 pt-2">
+                    <button class="flex flex-col items-center text-accent gap-1 text-xs font-medium w-16"><i data-lucide="home" class="w-5 h-5"></i> Home</button>
+                    <button class="flex flex-col items-center text-ink-sec gap-1 text-xs font-medium w-16 hover:text-ink"><i data-lucide="search" class="w-5 h-5"></i> Search</button>
+                    <button disabled class="flex flex-col items-center text-ink-ph gap-1 text-xs font-medium w-16 cursor-not-allowed">
+                        <span class="px-4 py-2 bg-paper border border-border text-ink-ph rounded-full text-xs font-semibold flex items-center gap-1">
+                            <i data-lucide="lock" class="w-3 h-3"></i> Sell
+                        </span>
+                    </button>
+                    <button disabled class="flex flex-col items-center text-ink-ph gap-1 text-xs font-medium w-16 cursor-not-allowed relative">
+                        <i data-lucide="message-square" class="w-5 h-5"></i> Chats
+                    </button>
+                    <button class="flex flex-col items-center text-ink-sec gap-1 text-xs font-medium w-16 hover:text-ink"><i data-lucide="user" class="w-5 h-5"></i> Profile</button>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- 5. SEARCH & FILTERS -->
+<section id="search-filters" class="space-y-8">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="font-serif text-2xl font-semibold border-b border-border pb-4 mb-8">05. Search & Filters</h2>
+    </div>
+    <div class="flex flex-wrap gap-8 justify-center items-start max-w-7xl mx-auto">
+        <!-- Search with recent -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">Search & Recents</span>
+            <div class="screen-mobile">
+                <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3 h-3"></i><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery-full" class="w-4 h-4"></i></span></div>
+                <header class="px-4 py-3 flex items-center gap-2 border-b border-border">
+                    <button class="text-ink"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                    <input type="text" placeholder="Search items..." value="calc" autofocus class="w-full h-10 px-4 border border-border rounded-8px bg-paper text-sm text-ink">
+                </header>
+                <div class="flex-1 p-4 overflow-y-auto">
+                    <p class="text-xs font-medium text-ink-sec uppercase tracking-wider mb-3">Recent searches</p>
+                    <div class="space-y-1">
+                        <button class="w-full flex items-center justify-between p-3 rounded-8px hover:bg-paper text-left">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="clock" class="w-4 h-4 text-ink-ph"></i>
+                                <span class="text-sm text-ink">Casio calculator</span>
+                            </div>
+                            <i data-lucide="arrow-up-left" class="w-4 h-4 text-ink-ph"></i>
+                        </button>
+                        <button class="w-full flex items-center justify-between p-3 rounded-8px hover:bg-paper text-left">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="clock" class="w-4 h-4 text-ink-ph"></i>
+                                <span class="text-sm text-ink">Drafting table</span>
+                            </div>
+                            <i data-lucide="arrow-up-left" class="w-4 h-4 text-ink-ph"></i>
+                        </button>
+                    </div>
+                    <div class="mt-6 pt-6 border-t border-border">
+                         <p class="text-xs font-medium text-ink-sec uppercase tracking-wider mb-3">Categories</p>
+                         <div class="flex flex-wrap gap-2">
+                            <span class="px-3 h-8 flex items-center border border-border rounded-full text-xs text-ink">Textbooks</span>
+                            <span class="px-3 h-8 flex items-center border border-border rounded-full text-xs text-ink">Electronics</span>
+                            <span class="px-3 h-8 flex items-center border border-border rounded-full text-xs text-ink">Hostel</span>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Bottom Sheet -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">Filter sheet</span>
+            <div class="screen-mobile relative">
+                <div class="absolute inset-0 bg-ink/20 fade-in"></div>
+                <div class="absolute bottom-0 left-0 right-0 bg-surface rounded-t-12px sheet-slide-up flex flex-col" style="max-height: 90%;">
+                    <div class="w-10 h-1 bg-border rounded-full mx-auto my-3"></div>
+                    <div class="px-4 pb-4 flex justify-between items-center border-b border-border">
+                        <h3 class="font-serif text-lg font-semibold">Filters</h3>
+                        <button class="text-ink-sec hover:text-ink"><i data-lucide="x" class="w-5 h-5"></i></button>
+                    </div>
+                    <div class="px-4 py-4 space-y-6 overflow-y-auto flex-1">
+                        <!-- Category -->
+                        <div>
+                            <label class="text-xs font-medium text-ink-sec mb-2 block">Category</label>
+                            <select class="w-full h-12 px-4 border border-border rounded-8px bg-surface text-sm text-ink">
+                                <option>All categories</option>
+                                <option selected>Textbooks</option>
+                                <option>Electronics</option>
+                            </select>
+                        </div>
+                        <!-- Price -->
+                        <div>
+                            <label class="text-xs font-medium text-ink-sec mb-2 block">Price range</label>
+                            <div class="flex gap-2">
+                                <div class="flex-1 relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-ink-ph text-sm">₹</span>
+                                    <input type="text" placeholder="Min" value="100" class="w-full h-12 pl-7 pr-4 border border-border rounded-8px bg-surface text-sm tnum text-ink">
+                                </div>
+                                <div class="flex-1 relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-ink-ph text-sm">₹</span>
+                                    <input type="text" placeholder="Max" value="500" class="w-full h-12 pl-7 pr-4 border border-border rounded-8px bg-surface text-sm tnum text-ink">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Condition -->
+                        <div>
+                            <label class="text-xs font-medium text-ink-sec mb-2 block">Condition</label>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="px-4 h-10 border border-accent bg-accent-tint text-accent rounded-full text-sm font-medium">Like new</button>
+                                <button class="px-4 h-10 border border-accent bg-accent-tint text-accent rounded-full text-sm font-medium">Good</button>
+                                <button class="px-4 h-10 border border-border text-ink rounded-full text-sm font-medium">Fair</button>
+                                <button class="px-4 h-10 border border-border text-ink rounded-full text-sm font-medium">Poor</button>
+                            </div>
+                        </div>
+                        <!-- Study Details -->
+                        <div>
+                            <label class="text-xs font-medium text-ink-sec mb-2 block">Study details (Optional)</label>
+                            <input type="text" placeholder="Subject (e.g., Mathematics)" class="w-full h-12 px-4 border border-border rounded-8px bg-surface text-sm text-ink mb-2">
+                            <div class="flex gap-2">
+                                <input type="text" placeholder="Semester" class="flex-1 h-12 px-4 border border-border rounded-8px bg-surface text-sm text-ink">
+                                <input type="text" placeholder="Edition" class="flex-1 h-12 px-4 border border-border rounded-8px bg-surface text-sm text-ink">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 border-t border-border flex gap-3 bg-surface">
+                        <button class="flex-1 h-12 border border-border text-ink rounded-8px font-medium text-sm hover:bg-paper">Clear</button>
+                        <button class="flex-1 h-12 bg-accent text-surface rounded-8px font-medium text-sm hover:bg-accent-hover">Show 24 items</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty / No results -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">No results</span>
+            <div class="screen-mobile">
+                <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3 h-3"></i><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery-full" class="w-4 h-4"></i></span></div>
+                <header class="px-4 py-3 flex items-center gap-2 border-b border-border">
+                    <button class="text-ink"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                    <div class="w-full h-10 px-4 border border-border rounded-8px bg-paper text-sm text-ink-ph flex items-center">quantum physics</div>
+                </header>
+                <div class="flex-1 flex flex-col items-center justify-center p-8 text-center">
+                    <div class="w-16 h-16 border border-border rounded-full flex items-center justify-center text-ink-ph mb-4">
+                        <i data-lucide="search-x" class="w-8 h-8"></i>
+                    </div>
+                    <h2 class="font-serif text-xl font-semibold mb-2">No items found</h2>
+                    <p class="text-sm text-ink-sec mb-6">Try adjusting your search or filters to find what you’re looking for.</p>
+                    <button class="h-12 px-6 border border-border text-ink rounded-8px font-medium text-sm hover:bg-paper">Clear filters</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Error state -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">Error state</span>
+            <div class="screen-mobile">
+                <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3 h-3"></i><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery-full" class="w-4 h-4"></i></span></div>
+                <header class="px-4 py-3 flex justify-between items-center">
+                    <div>
+                        <p class="text-xs text-ink-sec">Browsing on</p>
+                        <h2 class="font-serif text-xl font-semibold leading-tight">IIT Delhi</h2>
+                    </div>
+                </header>
+                <div class="flex-1 flex flex-col items-center justify-center p-8 text-center">
+                    <div class="w-16 h-16 border border-border rounded-full flex items-center justify-center text-danger mb-4">
+                        <i data-lucide="wifi-off" class="w-8 h-8"></i>
+                    </div>
+                    <h2 class="font-serif text-xl font-semibold mb-2">Couldn’t load listings</h2>
+                    <p class="text-sm text-ink-sec mb-6">You’re offline. Connect to campus Wi-Fi and try again.</p>
+                    <button class="h-12 px-6 bg-accent text-surface rounded-8px font-medium text-sm hover:bg-accent-hover">Retry</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- 6. CREATE LISTING -->
+<section id="create-listing" class="space-y-8">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="font-serif text-2xl font-semibold border-b border-border pb-4 mb-8">06. Create Listing</h2>
+    </div>
+    <div class="flex flex-wrap gap-8 justify-center items-start max-w-7xl mx-auto">
+        <!-- Create Listing Form -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">Create listing</span>
+            <div class="screen-mobile">
+                <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3 h-3"></i><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery-full" class="w-4 h-4"></i></span></div>
+                <header class="px-4 py-3 flex justify-between items-center border-b border-border">
+                    <button class="text-ink-sec hover:text-ink text-sm">Cancel</button>
+                    <h2 class="font-serif text-lg font-semibold">New listing</h2>
+                    <div class="w-12"></div>
+                </header>
+                
+                <div class="flex-1 overflow-y-auto p-4 space-y-6 pb-24">
+                    <!-- Photos -->
+                    <div>
+                        <label class="text-sm font-medium text-ink mb-2 block">Photos <span class="text-ink-ph">(up to 5)</span></label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="aspect-square rounded-8px border border-border overflow-hidden relative">
+                                <img src="https://placehold.co/100x100/F4F1EC/8A8A83?text=Book" class="w-full h-full object-cover" alt="Upload">
+                                <button class="absolute top-1 right-1 w-5 h-5 bg-ink/70 text-surface rounded-full flex items-center justify-center text-xs hover:bg-ink"><i data-lucide="x" class="w-3 h-3"></i></button>
+                            </div>
+                            <button class="aspect-square rounded-8px border border-dashed border-border flex flex-col items-center justify-center text-ink-ph hover:bg-paper hover:text-accent">
+                                <i data-lucide="plus" class="w-6 h-6 mb-1"></i>
+                                <span class="text-xs">Add photo</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Title -->
+                    <div>
+                        <label class="text-sm font-medium text-ink mb-2 block">Title</label>
+                        <input type="text" value="Engineering Mathematics - Vol 1" class="w-full h-12 px-4 border border-border rounded-8px bg-surface text-sm text-ink">
+                    </div>
+                    
+                    <!-- Price -->
+                    <div>
+                        <label class="text-sm font-medium text-ink mb-2 block">Price</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-ink text-sm font-medium">₹</span>
+                            <input type="text" value="450" class="w-full h-12 pl-8 pr-4 border border-border rounded-8px bg-surface text-sm text-ink tnum">
+                        </div>
+                    </div>
+                    
+                    <!-- Category -->
+                    <div>
+                        <label class="text-sm font-medium text-ink mb-2 block">Category</label>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="px-4 h-10 border border-accent bg-accent-tint text-accent rounded-full text-sm font-medium">Textbook</button>
+                            <button class="px-4 h-10 border border-border text-ink rounded-full text-sm font-medium">Notes</button>
+                            <button class="px-4 h-10 border border-border text-ink rounded-full text-sm font-medium">Electronics</button>
+                            <button class="px-4 h-10 border border-border text-ink rounded-full text-sm font-medium">Hostel</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Condition -->
+                    <div>
+                        <label class="text-sm font-medium text-ink mb-2 block">Condition</label>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="px-4 h-10 border border-border text-ink rounded-full text-sm font-medium">Like new</button>
+                            <button class="px-4 h-10 border border-accent bg-accent-tint text-accent rounded-full text-sm font-medium">Good</button>
+                            <button class="px-4 h-10 border border-border text-ink rounded-full text-sm font-medium">Fair</button>
+                            <button class="px-4 h-10 border border-border text-ink rounded-full text-sm font-medium">Poor</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div>
+                        <label class="text-sm font-medium text-ink mb-2 block">Description</label>
+                        <textarea class="w-full p-4 border border-border rounded-8px bg-surface text-sm text-ink h-24 resize-none" placeholder="Describe your item...">Barely used, no highlights. Includes solution manual.</textarea>
+                    </div>
+                    
+                    <!-- Collapsed Study Details -->
+                    <details class="group">
+                        <summary class="flex items-center justify-between p-4 border border-border rounded-8px cursor-pointer hover:bg-paper list-none">
+                            <span class="text-sm font-medium text-ink flex items-center gap-2">
+                                <i data-lucide="book-marked" class="w-4 h-4 text-ink-sec"></i>
+                                Add study details
+                            </span>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-ink-sec group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <div class="mt-4 space-y-4">
+                             <input type="text" placeholder="Subject (e.g., Mathematics)" class="w-full h-12 px-4 border border-border rounded-8px bg-surface text-sm text-ink">
+                             <div class="flex gap-2">
+                                <input type="text" placeholder="Semester" class="flex-1 h-12 px-4 border border-border rounded-8px bg-surface text-sm text-ink">
+                                <input type="text" placeholder="Edition" class="flex-1 h-12 px-4 border border-border rounded-8px bg-surface text-sm text-ink">
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <!-- Banned Items Notice -->
+                    <div class="p-3 border border-transparent bg-paper rounded-8px text-xs text-ink-sec flex items-start gap-2">
+                        <i data-lucide="info" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                        <p>Do not list prohibited items (e.g., alcohol, tobacco, weapons). Listings violating campus rules will be removed.</p>
+                    </div>
+                </div>
+                
+                <div class="absolute bottom-0 left-0 right-0 bg-surface border-t border-border p-4">
+                    <button class="w-full h-12 bg-accent text-surface rounded-8px font-medium text-sm hover:bg-accent-hover">Publish listing</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Validation Error State -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">Inline validation</span>
+            <div class="screen-mobile">
+                <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3 h-3"></i><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery-full" class="w-4 h-4"></i></span></div>
+                <header class="px-4 py-3 flex justify-between items-center border-b border-border">
+                    <button class="text-ink-sec hover:text-ink text-sm">Cancel</button>
+                    <h2 class="font-serif text-lg font-semibold">New listing</h2>
+                    <div class="w-12"></div>
+                </header>
+                <div class="flex-1 overflow-y-auto p-4 space-y-6 pb-24">
+                    <div>
+                        <label class="text-sm font-medium text-ink mb-2 block">Photos <span class="text-danger text-xs">(Required)</span></label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button class="aspect-square rounded-8px border border-danger border-dashed flex flex-col items-center justify-center text-danger hover:bg-paper">
+                                <i data-lucide="image-plus" class="w-6 h-6 mb-1"></i>
+                                <span class="text-xs">Add photo</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-ink mb-2 block">Title</label>
+                        <input type="text" value="Maths" class="w-full h-12 px-4 border border-danger rounded-8px bg-surface text-sm text-ink focus:ring-danger">
+                        <p class="text-xs text-danger mt-1 flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i> Title must be at least 5 characters long.</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-ink mb-2 block">Price</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-ink text-sm font-medium">₹</span>
+                            <input type="text" placeholder="0" class="w-full h-12 pl-8 pr-4 border border-danger rounded-8px bg-surface text-sm text-ink-ph tnum focus:ring-danger">
+                        </div>
+                        <p class="text-xs text-danger mt-1 flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i> Please enter a valid price.</p>
+                    </div>
+                </div>
+                 <div class="absolute bottom-0 left-0 right-0 bg-surface border-t border-border p-4">
+                    <button disabled class="w-full h-12 bg-accent/50 text-surface rounded-8px font-medium text-sm cursor-not-allowed">Publish listing</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- 7. TRANSACTION DETAIL & PROFILE -->
+<section id="transaction-profile" class="space-y-8">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="font-serif text-2xl font-semibold border-b border-border pb-4 mb-8">07. Transaction Detail & Profile</h2>
+    </div>
+    <div class="flex flex-wrap gap-8 justify-center items-start max-w-7xl mx-auto">
+        <!-- Transaction Detail -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">Transaction detail</span>
+            <div class="screen-mobile">
+                <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3 h-3"></i><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery-full" class="w-4 h-4"></i></span></div>
+                <header class="px-4 py-3 flex items-center justify-between border-b border-border">
+                    <button class="text-ink"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                    <h2 class="font-serif text-lg font-semibold">Deal details</h2>
+                    <div class="w-5"></div>
+                </header>
+                <div class="flex-1 overflow-y-auto p-4 space-y-6">
+                    <!-- Listing Summary -->
+                    <div class="flex gap-4 p-4 border border-border rounded-12px">
+                        <img src="https://placehold.co/80x80/F4F1EC/8A8A83?text=Book" class="w-16 h-16 rounded-8px object-cover" alt="Item">
+                        <div>
+                            <p class="text-sm text-ink font-medium">Engineering Mathematics - Vol 1</p>
+                            <p class="text-sm text-accent font-medium tnum mt-1">₹450</p>
+                            <p class="text-xs text-ink-sec mt-1">Sold by Aarav Sharma</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Status Timeline -->
+                    <div>
+                        <h3 class="text-xs font-medium text-ink-sec uppercase tracking-wider mb-4">Timeline</h3>
+                        <div class="space-y-4 relative pl-6">
+                            <div class="absolute left-2 top-2 bottom-2 w-px bg-border"></div>
+                            <!-- Step 1 -->
+                            <div class="relative">
+                                <div class="absolute -left-6 top-0 w-4 h-4 rounded-full bg-accent border-4 border-paper"></div>
+                                <p class="text-sm font-medium text-ink">Deal initiated</p>
+                                <p class="text-xs text-ink-sec">Oct 24, 4:00 PM</p>
+                            </div>
+                            <!-- Step 2 -->
+                            <div class="relative">
+                                <div class="absolute -left-6 top-0 w-4 h-4 rounded-full bg-accent border-4 border-paper"></div>
+                                <p class="text-sm font-medium text-ink">Deal agreed</p>
+                                <p class="text-xs text-ink-sec">Oct 24, 4:15 PM</p>
+                            </div>
+                            <!-- Step 3 -->
+                            <div class="relative">
+                                <div class="absolute -left-6 top-0 w-4 h-4 rounded-full bg-accent border-4 border-paper"></div>
+                                <p class="text-sm font-medium text-ink">Meetup scheduled</p>
+                                <p class="text-xs text-ink-sec">Oct 24, 4:30 PM</p>
+                            </div>
+                            <!-- Step 4 (Pending) -->
+                            <div class="relative">
+                                <div class="absolute -left-6 top-0 w-4 h-4 rounded-full border-2 border-border bg-paper"></div>
+                                <p class="text-sm font-medium text-ink-sec">Transaction completed</p>
+                                <p class="text-xs text-ink-ph">Pending confirmation</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Details -->
+                    <div class="border-t border-border pt-4 space-y-3 text-sm">
+                        <div class="flex justify-between"><span class="text-ink-sec">Agreed price</span><span class="text-ink font-medium tnum">₹450</span></div>
+                        <div class="flex justify-between"><span class="text-ink-sec">Payment method</span><span class="text-ink font-medium">Cash</span></div>
+                        <div class="flex justify-between"><span class="text-ink-sec">Meetup place</span><span class="text-ink font-medium text-right">Library Steps<br>Block A</span></div>
+                        <div class="flex justify-between"><span class="text-ink-sec">Time</span><span class="text-ink font-medium">Oct 25, 4:00 PM</span></div>
+                    </div>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 bg-surface border-t border-border p-4">
+                    <button class="w-full h-12 bg-accent text-surface rounded-8px font-medium text-sm hover:bg-accent-hover">Mark as complete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Own -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">Own profile</span>
+            <div class="screen-mobile">
+                <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3 h-3"></i><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery-full" class="w-4 h-4"></i></span></div>
+                <header class="px-4 py-3 flex items-center justify-between border-b border-border">
+                    <h2 class="font-serif text-lg font-semibold">Profile</h2>
+                    <button class="text-ink-sec hover:text-ink p-1"><i data-lucide="settings" class="w-5 h-5"></i></button>
+                </header>
+                <div class="flex-1 overflow-y-auto pb-24">
+                    <div class="p-6 flex flex-col items-center text-center border-b border-border">
+                        <div class="w-20 h-20 rounded-full bg-accent-tint flex items-center justify-center text-accent text-2xl font-medium mb-3">A</div>
+                        <h3 class="font-serif text-xl font-semibold">Aarav Sharma</h3>
+                        <p class="text-xs text-success flex items-center gap-1 mt-1"><i data-lucide="badge-check" class="w-3 h-3"></i> Verified student · IIT Delhi</p>
+                    </div>
+                    <div class="p-4 border-b border-border">
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="text-sm font-medium text-ink-sec uppercase tracking-wider">My listings (3)</h4>
+                            <button class="text-xs text-accent hover:underline">View all</button>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex gap-3 items-center">
+                                <img src="https://placehold.co/48x48/F4F1EC/8A8A83?text=Book" class="w-12 h-12 rounded-8px object-cover" alt="Item">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm text-ink font-medium truncate">Engineering Maths Vol 1</p>
+                                    <p class="text-xs text-accent tnum font-medium">₹450</p>
+                                </div>
+                                <button class="text-xs text-ink-sec hover:text-ink border border-border px-3 h-8 rounded-8px font-medium">Edit</button>
+                            </div>
+                            <div class="flex gap-3 items-center">
+                                <img src="https://placehold.co/48x48/F4F1EC/8A8A83?text=Desk" class="w-12 h-12 rounded-8px object-cover" alt="Item">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm text-ink font-medium truncate">Hostel Table Lamp</p>
+                                    <p class="text-xs text-accent tnum font-medium">₹600</p>
+                                </div>
+                                <button class="text-xs text-ink-sec hover:text-ink border border-border px-3 h-8 rounded-8px font-medium">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 border-b border-border">
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="text-sm font-medium text-ink-sec uppercase tracking-wider">My deals (2)</h4>
+                            <button class="text-xs text-accent hover:underline">View all</button>
+                        </div>
+                         <div class="space-y-3">
+                            <div class="p-3 border border-border rounded-8px flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm text-ink font-medium">Engineering Maths Vol 1</p>
+                                    <p class="text-xs text-ink-sec">Buyer: Priya Singh</p>
+                                </div>
+                                <span class="text-xs text-accent font-medium bg-accent-tint px-2 py-1 rounded-full">Meetup set</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <button class="w-full h-12 border border-border text-ink rounded-8px font-medium text-sm hover:bg-paper">Sign out</button>
+                    </div>
+                </div>
+                 <!-- Bottom Tab Bar -->
+                <nav class="absolute bottom-0 left-0 right-0 bg-surface border-t border-border flex justify-around items-center h-16 px-2 pb-2 pt-2">
+                    <button class="flex flex-col items-center text-ink-sec gap-1 text-xs font-medium w-16 hover:text-ink"><i data-lucide="home" class="w-5 h-5"></i> Home</button>
+                    <button class="flex flex-col items-center text-ink-sec gap-1 text-xs font-medium w-16 hover:text-ink"><i data-lucide="search" class="w-5 h-5"></i> Search</button>
+                    <button class="flex flex-col items-center gap-1 text-xs font-medium w-16"><span class="px-4 py-2 bg-accent text-surface rounded-full text-xs font-semibold hover:bg-accent-hover">Sell</span></button>
+                    <button class="flex flex-col items-center text-ink-sec gap-1 text-xs font-medium w-16 hover:text-ink relative"><i data-lucide="message-square" class="w-5 h-5"></i> Chats</button>
+                    <button class="flex flex-col items-center text-accent gap-1 text-xs font-medium w-16"><i data-lucide="user" class="w-5 h-5"></i> Profile</button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Public Profile -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">Public profile</span>
+            <div class="screen-mobile">
+                <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3 h-3"></i><i data-lucide="wifi" class="w-3 h-3"></i><i data-lucide="battery-full" class="w-4 h-4"></i></span></div>
+                <header class="px-4 py-3 flex items-center justify-between border-b border-border">
+                    <button class="text-ink"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                    <button class="text-sm text-ink-sec hover:text-ink font-medium">Report</button>
+                </header>
+                <div class="flex-1 overflow-y-auto pb-24">
+                    <div class="p-6 flex flex-col items-center text-center border-b border-border">
+                        <div class="w-20 h-20 rounded-full bg-warning/10 flex items-center justify-center text-warning text-2xl font-medium mb-3">P</div>
+                        <h3 class="font-serif text-xl font-semibold">Priya Singh</h3>
+                        <p class="text-xs text-success flex items-center gap-1 mt-1"><i data-lucide="badge-check" class="w-3 h-3"></i> Verified student · IIT Delhi</p>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="text-sm font-medium text-ink-sec uppercase tracking-wider mb-3">Active listings (2)</h4>
+                        <div class="space-y-4">
+                            <div class="flex gap-3 items-center">
+                                <img src="https://placehold.co/64x64/F4F1EC/8A8A83?text=Notes" class="w-16 h-16 rounded-8px object-cover" alt="Item">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm text-ink font-medium truncate">Data Structures Notes</p>
+                                    <p class="text-sm text-accent tnum font-medium mt-1">₹150</p>
+                                    <p class="text-xs text-ink-sec mt-1">Like new · Notes · 1d ago</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 items-center">
+                                <img src="https://placehold.co/64x64/F4F1EC/8A8A83?text=Calc" class="w-16 h-16 rounded-8px object-cover" alt="Item">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm text-ink font-medium truncate">Casio FX-991ES Calculator</p>
+                                    <p class="text-sm text-accent tnum font-medium mt-1">₹350</p>
+                                    <p class="text-xs text-ink-sec mt-1">Like new · Electronics · 3d ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="absolute bottom-0 left-0 right-0 bg-surface border-t border-border p-4">
+                    <button class="w-full h-12 bg-accent text-surface rounded-8px font-medium text-sm hover:bg-accent-hover">Message Priya</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Report Bottom Sheet -->
+        <div class="flex flex-col items-center">
+            <span class="text-sm font-medium text-ink-sec mb-4">Report sheet</span>
+            <div class="screen-mobile relative">
+                <div class="absolute inset-0 bg-ink/20 fade-in"></div>
+                <div class="absolute bottom-0 left-0 right-0 bg-surface rounded-t-12px sheet-slide-up flex flex-col" style="max-height: 90%;">
+                    <div class="w-10 h-1 bg-border rounded-full mx-auto my-3"></div>
+                    <div class="px-4 pb-4 flex justify-between items-center border-b border-border">
+                        <h3 class="font-serif text-lg font-semibold">Report listing</h3>
+                        <button class="text-ink-sec hover:text-ink"><i data-lucide="x" class="w-5 h-5"></i></button>
+                    </div>
+                    <div class="px-4 py-4 space-y-2 overflow-y-auto flex-1">
+                        <p class="text-sm text-ink-sec mb-2">Why are you reporting this?</p>
+                        <button class="w-full p-4 flex items-center justify-between border border-accent bg-accent-tint rounded-8px text-left">
+                            <span class="text-sm text-ink font-medium">Banned item</span>
+                            <i data-lucide="check" class="w-4 h-4 text-accent"></i>
+                        </button>
+                        <button class="w-full p-4 flex items-center justify-between border border-border rounded-8px text-left hover:bg-paper">
+                            <span class="text-sm text-ink font-medium">Misleading content</span>
+                        </button>
+                        <button class="w-full p-4 flex items-center justify-between border border-border rounded-8px text-left hover:bg-paper">
+                            <span class="text-sm text-ink font-medium">Spam</span>
+                        </button>
+                        <button class="w-full p-4 flex items-center justify-between border border-border rounded-8px text-left hover:bg-paper">
+                            <span class="text-sm text-ink font-medium">Harassment</span>
+                        </button>
+                        <button class="w-full p-4 flex items-center justify-between border border-border rounded-8px text-left hover:bg-paper">
+                            <span class="text-sm text-ink font-medium">Other</span>
+                        </button>
+                        
+                        <div class="mt-4">
+                             <textarea class="w-full p-4 border border-border rounded-8px bg-surface text-sm text-ink h-24 resize-none" placeholder="Add details (optional)"></textarea>
+                        </div>
+                    </div>
+                    <div class="p-4 border-t border-border bg-surface">
+                        <button class="w-full h-12 bg-danger text-surface rounded-8px font-medium text-sm hover:opacity-90">Submit report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- 8. ADMIN (DESKTOP ONLY) -->
+<section id="admin" class="space-y-8">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="font-serif text-2xl font-semibold border-b border-border pb-4 mb-8">08. Admin Dashboard (Desktop Only)</h2>
+    </div>
+    <div class="max-w-7xl mx-auto">
+        <div class="screen-desktop">
+            <div class="flex flex-1 overflow-hidden">
+                <!-- Sidebar -->
+                <aside class="w-64 border-r border-border bg-surface flex flex-col">
+                    <div class="h-16 border-b border-border flex items-center px-6 font-serif text-lg font-semibold">Admin</div>
+                    <nav class="flex-1 p-4 space-y-1">
+                        <button class="w-full flex items-center gap-3 p-3 rounded-8px bg-accent text-surface text-sm font-medium">
+                            <i data-lucide="shield-check" class="w-4 h-4"></i> Verification
+                        </button>
+                        <button class="w-full flex items-center gap-3 p-3 rounded-8px text-ink-sec hover:bg-paper text-sm font-medium">
+                            <i data-lucide="flag" class="w-4 h-4"></i> Reports
+                        </button>
+                        <button class="w-full flex items-center gap-3 p-3 rounded-8px text-ink-sec hover:bg-paper text-sm font-medium">
+                            <i data-lucide="tag" class="w-4 h-4"></i> Listings
+                        </button>
+                        <button class="w-full flex items-center gap-3 p-3 rounded-8px text-ink-sec hover:bg-paper text-sm font-medium">
+                            <i data-lucide="users" class="w-4 h-4"></i> Users
+                        </button>
+                        <button class="w-full flex items-center gap-3 p-3 rounded-8px text-ink-sec hover:bg-paper text-sm font-medium">
+                            <i data-lucide="file-text" class="w-4 h-4"></i> Audit log
+                        </button>
+                    </nav>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="flex-1 overflow-y-auto bg-paper p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="font-serif text-2xl font-semibold">Verification Queue</h2>
+                            <p class="text-sm text-ink-sec mt-1">Review and approve student campus emails.</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <select class="h-10 px-4 border border-border rounded-8px bg-surface text-sm text-ink">
+                                <option>All campuses</option>
+                            </select>
+                            <select class="h-10 px-4 border border-border rounded-8px bg-surface text-sm text-ink">
+                                <option>Pending review</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="bg-surface border border-border rounded-12px overflow-hidden">
+                        <table class="w-full text-sm">
+                            <thead class="bg-paper border-b border-border">
+                                <tr class="text-left text-ink-sec">
+                                    <th class="px-6 py-3 font-medium">Student</th>
+                                    <th class="px-6 py-3 font-medium">Email</th>
+                                    <th class="px-6 py-3 font-medium">Campus</th>
+                                    <th class="px-6 py-3 font-medium">Submitted</th>
+                                    <th class="px-6 py-3 font-medium text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-border">
+                                <tr class="hover:bg-paper">
+                                    <td class="px-6 py-4 text-ink font-medium">Aarav Sharma</td>
+                                    <td class="px-6 py-4 text-ink-sec tnum">aarav.s@iitd.ac.in</td>
+                                    <td class="px-6 py-4 text-ink-sec">IIT Delhi</td>
+                                    <td class="px-6 py-4 text-ink-sec">Oct 24, 2023</td>
+                                    <td class="px-6 py-4 text-right space-x-2">
+                                        <button class="h-8 px-4 bg-accent text-surface rounded-8px text-xs font-medium hover:bg-accent-hover">Approve</button>
+                                        <button class="h-8 px-4 border border-danger text-danger rounded-8px text-xs font-medium hover:bg-danger/5">Reject</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-paper">
+                                    <td class="px-6 py-4 text-ink font-medium">Priya Singh</td>
+                                    <td class="px-6 py-4 text-ink-sec tnum">priya.s@iitb.ac.in</td>
+                                    <td class="px-6 py-4 text-ink-sec">IIT Bombay</td>
+                                    <td class="px-6 py-4 text-ink-sec">Oct 24, 2023</td>
+                                    <td class="px-6 py-4 text-right space-x-2">
+                                        <button class="h-8 px-4 bg-accent text-surface rounded-8px text-xs font-medium hover:bg-accent-hover">Approve</button>
+                                        <button class="h-8 px-4 border border-danger text-danger rounded-8px text-xs font-medium hover:bg-danger/5">Reject</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-paper">
+                                    <td class="px-6 py-4 text-ink font-medium">Rahul Verma</td>
+                                    <td class="px-6 py-4 text-ink-sec tnum">rahul.v@vit.ac.in</td>
+                                    <td class="px-6 py-4 text-ink-sec">VIT Vellore</td>
+                                    <td class="px-6 py-4 text-ink-sec">Oct 23, 2023</td>
+                                    <td class="px-6 py-4 text-right space-x-2">
+                                        <button class="h-8 px-4 bg-accent text-surface rounded-8px text-xs font-medium hover:bg-accent-hover">Approve</button>
+                                        <button class="h-8 px-4 border border-danger text-danger rounded-8px text-xs font-medium hover:bg-danger/5">Reject</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Destructive Action Modal Example -->
+                    <div class="mt-8 p-6 border border-border rounded-12px bg-surface max-w-md relative">
+                         <button class="absolute top-4 right-4 text-ink-sec hover:text-ink"><i data-lucide="x" class="w-4 h-4"></i></button>
+                         <h3 class="font-serif text-lg font-semibold mb-2">Reject verification</h3>
+                         <p class="text-sm text-ink-sec mb-4">Please provide a reason for rejecting this student. This will be logged in the audit trail.</p>
+                         <textarea class="w-full p-3 border border-border rounded-8px bg-paper text-sm text-ink h-20 resize-none mb-4" placeholder="Reason for rejection..."></textarea>
+                         <div class="flex justify-end gap-2">
+                             <button class="h-10 px-5 border border-border text-ink rounded-8px text-sm font-medium hover:bg-paper">Cancel</button>
+                             <button class="h-10 px-5 bg-danger text-surface rounded-8px text-sm font-medium hover:opacity-90">Confirm reject</button>
+                         </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- 9. COMPONENT SET -->
+<section id="components" class="space-y-8">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="font-serif text-2xl font-semibold border-b border-border pb-4 mb-8">09. Component Library</h2>
+    </div>
+    
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Buttons -->
+        <div class="p-6 border border-border rounded-12px bg-surface space-y-4">
+            <h3 class="font-serif text-lg font-semibold">Buttons</h3>
+            <div class="space-y-3">
+                <button class="w-full h-12 bg-accent text-surface rounded-8px font-medium text-sm hover:bg-accent-hover transition-colors">Primary button</button>
+                <button class="w-full h-12 border border-border text-ink rounded-8px font-medium text-sm hover:bg-paper transition-colors">Secondary button</button>
+                <button class="w-full h-12 text-accent rounded-8px font-medium text-sm hover:bg-accent-tint transition-colors">Text button</button>
+                <button class="w-full h-12 bg-danger text-surface rounded-8px font-medium text-sm hover:opacity-90 transition-colors">Destructive button</button>
+                <button disabled class="w-full h-12 bg-accent/50 text-surface rounded-8px font-medium text-sm cursor-not-allowed">Disabled button</button>
+                <button class="w-full h-12 bg-accent text-surface rounded-8px font-medium text-sm hover:bg-accent-hover transition-colors flex items-center justify-center gap-2">
+                    <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                    Loading...
+                </button>
+            </div>
+        </div>
+
+        <!-- Inputs -->
+        <div class="p-6 border border-border rounded-12px bg-surface space-y-4">
+            <h3 class="font-serif text-lg font-semibold">Inputs</h3>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-xs font-medium text-ink-sec mb-1 block">Default input</label>
+                    <input type="text" placeholder="Enter text..." class="w-full h-12 px-4 border border-border rounded-8px bg-surface text-sm placeholder:text-ink-ph">
+                </div>
+                <div>
+                    <label class="text-xs font-medium text-ink-sec mb-1 block">Focused input</label>
+                    <input type="text" value="Typing..." class="w-full h-12 px-4 border border-accent rounded-8px bg-surface text-sm text-ink" style="box-shadow: 0 0 0 2px #FAF8F4, 0 0 0 4px #1F3A5F;">
+                </div>
+                <div>
+                    <label class="text-xs font-medium text-ink-sec mb-1 block">Error input</label>
+                    <input type="text" value="bad@" class="w-full h-12 px-4 border border-danger rounded-8px bg-surface text-sm text-ink">
+                    <p class="text-xs text-danger mt-1 flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i> Invalid email format.</p>
+                </div>
+                <div>
+                    <label class="text-xs font-medium text-ink-sec mb-1 block">Price input</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-ink text-sm font-medium">₹</span>
+                        <input type="text" value="1,250" class="w-full h-12 pl-8 pr-4 border border-border rounded-8px bg-surface text-sm text-ink tnum">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chips & Tags -->
+        <div class="p-6 border border-border rounded-12px bg-surface space-y-4">
+            <h3 class="font-serif text-lg font-semibold">Chips & Tags</h3>
+            <div class="space-y-3">
+                <div class="flex flex-wrap gap-2">
+                    <button class="px-4 h-9 flex items-center justify-center rounded-full bg-accent text-surface text-sm font-medium">Active chip</button>
+                    <button class="px-4 h-9 flex items-center justify-center rounded-full border border-border text-ink text-sm font-medium hover:bg-paper">Default chip</button>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-1 text-xs font-medium text-success bg-success/10 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-success rounded-full"></span> Like new</span>
+                    <span class="px-2 py-1 text-xs font-medium text-warning bg-warning/10 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-warning rounded-full"></span> Good</span>
+                    <span class="px-2 py-1 text-xs font-medium text-danger bg-danger/10 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-danger rounded-full"></span> Poor</span>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                     <span class="px-2 py-1 text-xs font-medium text-accent bg-accent-tint rounded-full flex items-center gap-1"><i data-lucide="badge-check" class="w-3 h-3"></i> Verified student</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards & Listing Items -->
+        <div class="p-6 border border-border rounded-12px bg-surface space-y-4">
+            <h3 class="font-serif text-lg font-semibold">Listing Cards</h3>
+            <div class="space-y-4">
+                <!-- List View Skeleton -->
+                <div class="flex p-4 gap-4 border border-border rounded-12px">
+                    <div class="w-24 h-24 rounded-12px skeleton"></div>
+                    <div class="flex-1 space-y-2 pt-2">
+                        <div class="h-4 w-3/4 skeleton rounded-8px"></div>
+                        <div class="h-6 w-1/4 skeleton rounded-8px"></div>
+                        <div class="h-3 w-1/2 skeleton rounded-8px"></div>
+                    </div>
+                </div>
+                <!-- Grid View Skeleton -->
+                <div class="border border-border rounded-12px p-4">
+                    <div class="aspect-[4/3] mb-3 rounded-12px skeleton"></div>
+                    <div class="h-4 w-full skeleton rounded-8px mb-2"></div>
+                    <div class="h-6 w-1/3 skeleton rounded-8px"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat & Bubbles -->
+        <div class="p-6 border border-border rounded-12px bg-surface space-y-4">
+            <h3 class="font-serif text-lg font-semibold">Chat Bubbles & Toast</h3>
+            <div class="space-y-3">
+                <div class="flex flex-col items-start">
+                    <div class="bg-surface border border-border rounded-12px rounded-tl-sm p-3 max-w-[80%]">
+                        <p class="text-sm text-ink">Left aligned message (Other person)</p>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end">
+                    <div class="bg-accent-tint border border-transparent rounded-12px rounded-tr-sm p-3 max-w-[80%]">
+                        <p class="text-sm text-ink">Right aligned message (You)</p>
+                    </div>
+                </div>
+                <div class="mt-4 p-3 bg-surface border border-border rounded-8px flex items-start gap-2 shadow-sm relative max-w-sm">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-success flex-shrink-0"></i>
+                    <div>
+                        <p class="text-sm font-medium text-ink">Listing published successfully</p>
+                        <p class="text-xs text-ink-sec mt-0.5">Your item is now visible to students on your campus.</p>
+                        <button class="absolute top-2 right-2 text-ink-ph hover:text-ink"><i data-lucide="x" class="w-3 h-3"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Avatars & Empty State -->
+        <div class="p-6 border border-border rounded-12px bg-surface space-y-4">
+            <h3 class="font-serif text-lg font-semibold">Avatars & Empty States</h3>
+            <div class="flex gap-4 mb-6">
+                <div class="w-12 h-12 rounded-full bg-accent-tint flex items-center justify-center text-accent font-medium">A</div>
+                <div class="w-12 h-12 rounded-full bg-warning/10 flex items-center justify-center text-warning font-medium">P</div>
+                <div class="w-12 h-12 rounded-full border border-border overflow-hidden">
+                    <img src="https://placehold.co/48x48/8A8A83/FAF8F4?text=U" class="w-full h-full object-cover" alt="Avatar">
+                </div>
+            </div>
+            <div class="flex flex-col items-center justify-center p-6 text-center border border-dashed border-border rounded-12px">
+                <div class="w-12 h-12 border border-border rounded-full flex items-center justify-center text-ink-ph mb-3">
+                    <i data-lucide="package-open" class="w-6 h-6"></i>
+                </div>
+                <h4 class="font-serif text-base font-semibold mb-1">Nothing listed yet</h4>
+                <p class="text-xs text-ink-sec mb-4">Be the first on your campus to post an item.</p>
+                <button class="h-10 px-6 bg-accent text-surface rounded-8px text-xs font-medium hover:bg-accent-hover">Sell something</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    lucide.createIcons();
+</script>
+
+</body>
+</html>

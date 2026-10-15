@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #FAF8F4;
+  --surface: #FFFFFF;
+  --ink: #1A1A1A;
+  --ink-sec: #5C5C57;
+  --ink-ph: #8A8A83;
+  --line: #E4E1DA;
+  --accent: #1F3A5F;
+  --accent-hover: #162B47;
+  --accent-tint: #E8EDF4;
+  --success: #2F6B4F;
+  --warning: #A86B12;
+  --danger: #A63D2F;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-serif {
+  font-family: var(--font-serif), serif;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Subtle focus ring per Design.md */
+input:focus, textarea:focus, select:focus, button:focus-visible, a:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #FAF8F4, 0 0 0 4px #1F3A5F;
+}
+
+/* Hide scrollbars for horizontal filter chips */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
