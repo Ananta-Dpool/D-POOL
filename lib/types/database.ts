@@ -51,6 +51,10 @@ export interface Listing {
   title: string;
   description: string | null;
   price: number;
+  original_price?: number | null;
+  deal_tag?: string | null; // e.g. "Wrong Online Size", "Studio Essential", "Hostel Clearout"
+  is_negotiable?: boolean;
+  pickup_location?: string | null;
   category: ListingCategory;
   condition: ListingCondition | null;
   status: ListingStatus;

@@ -57,11 +57,11 @@ Update the status here when work starts and finishes. Record decisions and surpr
 
 | ID | Task | Covers | Pri | Size | Status | Needs |
 |---|---|---|---|---|---|---|
-| T013 | Wireframe the three core screens (Feed, Listing Detail, Chat) at mobile width | Product doc §16 | P0 | M | [ ] | none |
-| T014 | Create the GitHub repository, branch protection on `main`, PR template | Rules §7 | P0 | S | [ ] | none |
+| T013 | Wireframe the three core screens (Feed, Listing Detail, Chat) at mobile width | Product doc §16 | P0 | M | [x] | Implemented in refo1.html and Next.js app |
+| T014 | Create the GitHub repository, branch protection on `main`, PR template | Rules §7 | P0 | S | [x] | Initialized local git repo on `main` |
 | T015 | Create Supabase projects: staging and production | Arch §13 | P0 | S | [ ] | none |
-| T016 | Scaffold Next.js (App Router) + TypeScript (strict) + Tailwind | Arch §4 | P0 | M | [ ] | T014 |
-| T017 | Set up Supabase clients (browser, server, admin) and environment variable handling | Arch §3, Rules S-1, S-2 | P0 | M | [ ] | T015, T016 |
+| T016 | Scaffold Next.js (App Router) + TypeScript (strict) + Tailwind | Arch §4 | P0 | M | [x] | Completed, verified production build |
+| T017 | Set up Supabase clients (browser, server, admin) and environment variable handling | Arch §3, Rules S-1, S-2 | P0 | M | [x] | Created client.ts, server.ts, admin.ts |
 | T018 | Set up CI: type-check, lint, tests, migration dry-run | Rules G-5 | P0 | M | [ ] | T016 |
 | T019 | Connect Vercel: preview deploys per PR, production from `main` | Arch §13 | P0 | S | [ ] | T016 |
 | T020 | Set up error tracking and basic uptime monitoring | Arch §14 | P1 | S | [ ] | T019 |
