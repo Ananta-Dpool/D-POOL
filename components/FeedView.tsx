@@ -1,52 +1,53 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { SlidersHorizontal, Sparkles } from "lucide-react";
+import { SlidersHorizontal, Sparkles, X } from "lucide-react";
 import { Listing } from "@/lib/types/database";
 import { ListingCard } from "./ListingCard";
+import {
+  FilterModal,
+  FilterOptions,
+  CATEGORIES,
+  BUDGET_OPTIONS,
+  SORT_OPTIONS,
+} from "./FilterModal";
 
 interface FeedViewProps {
   initialListings: Listing[];
   searchQuery: string;
 }
 
-const CATEGORIES = [
-  { id: "all", label: "All Items" },
-  { id: "thrift", label: "Thrift & Fashion" },
-  { id: "dorm_decor", label: "Dorm Essentials" },
-  { id: "accessories", label: "Accessories" },
-  { id: "other", label: "Studio Tools" },
-];
-
-const BUDGET_FILTERS = [
-  { id: "all", label: "Any Price" },
-  { id: "under_300", label: "Under ₹300", max: 300 },
-  { id: "under_600", label: "Under ₹600", max: 600 },
-  { id: "under_1000", label: "Under ₹1,000", max: 1000 },
-];
-
 export function FeedView({ initialListings, searchQuery }: FeedViewProps) {
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedBudget, setSelectedBudget] = useState("all");
-  const [sortBy, setSortBy] = useState<"newest" | "price_asc" | "price_desc">("newest");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filters, setFilters] = useState<FilterOptions>({
+    category: "all",
+    budget: "all",
+    sortBy: "newest",
+  });
+
+  // Calculate active filter count (excluding defaults)
+  const activeFilterCount =
+    (filters.category !== "all" ? 1 : 0) +
+    (filters.budget !== "all" ? 1 : 0) +
+    (filters.sortBy !== "newest" ? 1 : 0);
 
   const filteredListings = useMemo(() => {
     return initialListings
       .filter((item) => {
         // Category filter
-        if (selectedCategory !== "all" && item.category !== selectedCategory) {
+        if (filters.category !== "all" && item.category !== filters.category) {
           return false;
         }
 
         // Budget filter
-        if (selectedBudget !== "all") {
-          const budget = BUDGET_FILTERS.find((b) => b.id === selectedBudget);
+        if (filters.budget !== "all") {
+          const budget = BUDGET_OPTIONS.find((b) => b.id === filters.budget);
           if (budget?.max && item.price > budget.max) {
             return false;
           }
         }
 
-        // Search filter
+        // Search query filter
         if (searchQuery.trim()) {
           const q = searchQuery.toLowerCase();
           const matchTitle = item.title.toLowerCase().includes(q);
@@ -58,85 +59,122 @@ export function FeedView({ initialListings, searchQuery }: FeedViewProps) {
         return true;
       })
       .sort((a, b) => {
-        if (sortBy === "price_asc") return a.price - b.price;
-        if (sortBy === "price_desc") return b.price - a.price;
+        if (filters.sortBy === "price_asc") return a.price - b.price;
+        if (filters.sortBy === "price_desc") return b.price - a.price;
         return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
       });
-  }, [initialListings, selectedCategory, selectedBudget, searchQuery, sortBy]);
+  }, [initialListings, filters, searchQuery]);
+
+  // Labels for active chips
+  const activeCategoryLabel =
+    filters.category !== "all"
+      ? CATEGORIES.find((c) => c.id === filters.category)?.label
+      : null;
+  const activeBudgetLabel =
+    filters.budget !== "all"
+      ? BUDGET_OPTIONS.find((b) => b.id === filters.budget)?.label
+      : null;
+  const activeSortLabel =
+    filters.sortBy !== "newest"
+      ? SORT_OPTIONS.find((s) => s.id === filters.sortBy)?.label
+      : null;
 
   return (
     <div className="flex-1 flex flex-col">
-      {/* Category Filter Chips */}
-      <div className="flex gap-1.5 overflow-x-auto no-scrollbar px-4 pt-2.5 pb-2 bg-surface border-b border-border">
-        {CATEGORIES.map((cat) => {
-          const isSelected = selectedCategory === cat.id;
-          return (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-                isSelected
-                  ? "bg-accent text-surface shadow-2xs"
-                  : "bg-paper text-ink-sec border border-border/80 hover:text-ink"
-              }`}
-            >
-              {cat.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Flipkart/Amazon-style Budget Filter Strip */}
-      <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar px-4 py-2 bg-paper/60 border-b border-border/70 text-[11px]">
-        <span className="text-ink-sec font-medium whitespace-nowrap text-[10px] uppercase tracking-wider">
-          Budget:
-        </span>
-        {BUDGET_FILTERS.map((b) => {
-          const isSelected = selectedBudget === b.id;
-          return (
-            <button
-              key={b.id}
-              onClick={() => setSelectedBudget(b.id)}
-              className={`px-2.5 py-0.5 rounded-full whitespace-nowrap transition-colors text-[11px] ${
-                isSelected
-                  ? "bg-ink text-surface font-semibold"
-                  : "bg-surface border border-border text-ink-sec hover:text-ink"
-              }`}
-            >
-              {b.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Live Campus Wanted Ticker (Depop / Campus Community style) */}
-      <div className="bg-accent-tint/30 border-b border-border/60 px-4 py-2 flex items-center gap-2 text-xs overflow-hidden">
-        <Sparkles className="w-3.5 h-3.5 text-accent flex-shrink-0" />
-        <div className="text-[11px] text-ink truncate">
-          <span className="font-semibold text-accent mr-1">Wanted on Campus:</span>
-          <span className="text-ink-sec">
-            Pooja is looking for Casio 991ES • Rahul needs A2 drafter • Sneha wants warm string lights
+      {/* Compact Filter & Sort Bar (Replaces the two stacked pill rows) */}
+      <div className="bg-surface border-b border-border px-4 py-2.5 flex items-center justify-between gap-3">
+        {/* Left: Item count and active summary */}
+        <div className="flex items-center gap-2 truncate">
+          <span className="text-xs text-ink-sec whitespace-nowrap">
+            Showing <strong className="text-ink font-semibold">{filteredListings.length}</strong> items
           </span>
         </div>
+
+        {/* Right: Small sleek Filter & Sort button */}
+        <button
+          onClick={() => setIsFilterOpen(true)}
+          className={`flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-semibold border transition-all ${
+            activeFilterCount > 0
+              ? "bg-accent text-surface border-accent shadow-xs"
+              : "bg-paper hover:bg-border/40 text-ink border-border"
+          }`}
+        >
+          <SlidersHorizontal className="w-3.5 h-3.5" />
+          <span>Filter &amp; Sort</span>
+          {activeFilterCount > 0 && (
+            <span className="w-4 h-4 rounded-full bg-surface text-accent text-[10px] font-bold flex items-center justify-center -mr-1">
+              {activeFilterCount}
+            </span>
+          )}
+        </button>
       </div>
 
-      {/* Results Header + Sort */}
-      <div className="flex justify-between items-center px-4 py-2 bg-paper/90 border-b border-border text-xs text-ink-sec">
-        <span>
-          Showing <strong className="text-ink font-semibold">{filteredListings.length}</strong> items
-        </span>
+      {/* Applied Filter Tags (Compact row only when filters are active) */}
+      {activeFilterCount > 0 && (
+        <div className="flex items-center gap-1.5 px-4 py-1.5 bg-accent-tint/40 border-b border-border/60 overflow-x-auto no-scrollbar text-[11px]">
+          <span className="text-ink-sec text-[10px] uppercase font-bold tracking-wider mr-0.5">
+            Active:
+          </span>
 
-        <div className="flex items-center gap-1.5">
-          <SlidersHorizontal className="w-3.5 h-3.5 text-ink-ph" />
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
-            className="bg-transparent text-xs text-ink font-medium border-none focus:outline-none cursor-pointer"
+          {activeCategoryLabel && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface border border-border text-ink font-medium">
+              {activeCategoryLabel}
+              <button
+                onClick={() => setFilters({ ...filters, category: "all" })}
+                className="hover:text-danger"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          )}
+
+          {activeBudgetLabel && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface border border-border text-ink font-medium">
+              {activeBudgetLabel}
+              <button
+                onClick={() => setFilters({ ...filters, budget: "all" })}
+                className="hover:text-danger"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          )}
+
+          {activeSortLabel && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface border border-border text-ink font-medium">
+              {activeSortLabel}
+              <button
+                onClick={() => setFilters({ ...filters, sortBy: "newest" })}
+                className="hover:text-danger"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          )}
+
+          <button
+            onClick={() =>
+              setFilters({
+                category: "all",
+                budget: "all",
+                sortBy: "newest",
+              })
+            }
+            className="text-[10px] text-accent underline ml-1 hover:text-accent-hover font-medium whitespace-nowrap"
           >
-            <option value="newest">Newest first</option>
-            <option value="price_asc">Price: Low to High</option>
-            <option value="price_desc">Price: High to Low</option>
-          </select>
+            Clear All
+          </button>
+        </div>
+      )}
+
+      {/* Campus Wanted Ticker */}
+      <div className="bg-accent-tint/20 border-b border-border/60 px-4 py-1.5 flex items-center gap-2 text-xs overflow-hidden">
+        <Sparkles className="w-3 h-3 text-accent flex-shrink-0" />
+        <div className="text-[11px] text-ink truncate">
+          <span className="font-semibold text-accent mr-1">Campus Wanted:</span>
+          <span className="text-ink-sec">
+            Pooja wants Casio 991ES • Rahul needs A2 drafter • Sneha wants fairy lights
+          </span>
         </div>
       </div>
 
@@ -148,22 +186,34 @@ export function FeedView({ initialListings, searchQuery }: FeedViewProps) {
           ))
         ) : (
           <div className="p-12 text-center">
-            <p className="text-sm font-medium text-ink">No items match your filters</p>
+            <p className="text-sm font-medium text-ink">No items match your criteria</p>
             <p className="text-xs text-ink-sec mt-1">
-              Try resetting the budget filter or search for something else.
+              Try adjusting the budget or goods category in the filter.
             </p>
             <button
-              onClick={() => {
-                setSelectedCategory("all");
-                setSelectedBudget("all");
-              }}
-              className="mt-3 px-3 py-1 bg-accent-tint text-accent font-semibold text-xs rounded-full hover:bg-accent hover:text-surface transition-colors"
+              onClick={() =>
+                setFilters({
+                  category: "all",
+                  budget: "all",
+                  sortBy: "newest",
+                })
+              }
+              className="mt-3 px-3.5 py-1.5 bg-accent text-surface font-semibold text-xs rounded-full hover:bg-accent-hover transition-colors shadow-2xs"
             >
-              Reset Filters
+              Reset All Filters
             </button>
           </div>
         )}
       </div>
+
+      {/* Filter & Sort Bottom Sheet Modal */}
+      <FilterModal
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        filters={filters}
+        onApplyFilters={setFilters}
+        totalResultsCount={filteredListings.length}
+      />
     </div>
   );
 }
