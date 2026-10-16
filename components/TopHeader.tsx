@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Bell, LogIn, MapPin, Search } from "lucide-react";
 import { useAuth } from "@/lib/auth/context";
 
@@ -37,14 +38,24 @@ export function TopHeader({
 
   return (
     <header className="sticky top-0 z-30 bg-surface/95 backdrop-blur-md border-b border-border">
-      {/* Top row: Brand + Campus Indicator + Notification + Login */}
+      {/* Top row: Brand Icon + Campus Indicator + Notification + Login */}
       <div className="flex items-center justify-between px-3 sm:px-4 pt-3 pb-2 gap-2">
-        {/* Brand Name (never wraps) */}
+        {/* Brand Icon in top corner */}
         <Link
           href="/"
-          className="font-serif font-bold text-base sm:text-lg tracking-tight text-ink hover:text-accent flex-shrink-0 whitespace-nowrap"
+          className="flex items-center flex-shrink-0 hover:opacity-90 active:scale-95 transition-all"
+          title="D' POOL Home"
         >
-          D&apos; POOL
+          <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-border shadow-2xs bg-surface">
+            <Image
+              src="/logo.jpg"
+              alt="D' POOL"
+              fill
+              sizes="32px"
+              priority
+              className="object-cover"
+            />
+          </div>
         </Link>
 
         {/* Right side items: Campus location + Bell + Log in */}
