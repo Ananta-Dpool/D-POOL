@@ -37,56 +37,54 @@ export function TopHeader({
 
   return (
     <header className="sticky top-0 z-30 bg-surface/95 backdrop-blur-md border-b border-border">
-      {/* Top row: Brand + Campus Indicator + Notification */}
-      <div className="flex items-center justify-between px-4 pt-3 pb-2">
-        <div className="flex items-center gap-1.5">
-          <Link
-            href="/"
-            className="font-serif font-bold text-lg tracking-tight text-ink hover:text-accent flex items-center gap-1"
-          >
-            <span>D&apos; POOL</span>
-          </Link>
-          <span className="text-[9px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-accent-tint text-accent">
-            SPAV
-          </span>
-        </div>
+      {/* Top row: Brand + Campus Indicator + Notification + Login */}
+      <div className="flex items-center justify-between px-3 sm:px-4 pt-3 pb-2 gap-2">
+        {/* Brand Name (never wraps) */}
+        <Link
+          href="/"
+          className="font-serif font-bold text-base sm:text-lg tracking-tight text-ink hover:text-accent flex-shrink-0 whitespace-nowrap"
+        >
+          D&apos; POOL
+        </Link>
 
-        <div className="flex items-center gap-2">
-          {/* Amazon/Flipkart inspired Location / Campus Pill */}
-          <div className="flex items-center gap-1 text-[11px] font-medium text-ink-sec bg-paper border border-border px-2.5 py-1 rounded-full shadow-2xs">
-            <MapPin className="w-3 h-3 text-accent flex-shrink-0" />
-            <span className="max-w-[130px] truncate">{campusName}</span>
+        {/* Right side items: Campus location + Bell + Log in */}
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 min-w-0">
+          {/* Location / Campus Pill */}
+          <div className="flex items-center gap-1 text-[10px] sm:text-[11px] font-medium text-ink-sec bg-paper border border-border px-2 py-1 rounded-full shadow-2xs min-w-0 flex-shrink">
+            <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-accent flex-shrink-0" />
+            <span className="max-w-[85px] sm:max-w-[120px] truncate">{campusName}</span>
           </div>
 
+          {/* Notifications Bell */}
           <Link
             href="/chats"
-            className="p-1.5 text-ink-sec hover:text-ink relative rounded-full hover:bg-paper transition-colors"
+            className="p-1.5 text-ink-sec hover:text-ink relative rounded-full hover:bg-paper transition-colors flex-shrink-0"
             title="Messages"
           >
-            <Bell className="w-4 h-4" />
+            <Bell className="w-4 h-4 flex-shrink-0" />
             <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full" />
           </Link>
 
-          {/* Small Login Button or User Profile Pill beside Bell icon */}
+          {/* Small Login Button or User Profile Pill beside Bell icon (never wraps) */}
           {user ? (
             <Link
               href="/profile"
-              className="h-7 pl-1.5 pr-2.5 rounded-full bg-accent-tint border border-border/80 text-accent text-xs font-semibold flex items-center gap-1.5 hover:bg-accent-tint/80 transition-colors"
+              className="h-7 pl-1.5 pr-2.5 rounded-full bg-accent-tint border border-border/80 text-accent text-xs font-semibold flex items-center gap-1.5 hover:bg-accent-tint/80 transition-colors whitespace-nowrap flex-shrink-0"
               title={user.name}
             >
-              <div className="w-4 h-4 rounded-full bg-accent text-surface text-[9px] font-bold flex items-center justify-center">
+              <div className="w-4 h-4 rounded-full bg-accent text-surface text-[9px] font-bold flex items-center justify-center flex-shrink-0">
                 {user.name.charAt(0).toUpperCase()}
               </div>
-              <span className="max-w-[65px] truncate text-[11px]">{user.name.split(" ")[0]}</span>
+              <span className="max-w-[60px] truncate text-[11px] whitespace-nowrap">{user.name.split(" ")[0]}</span>
             </Link>
           ) : (
             <Link
               href="/login"
-              className="h-7 px-2.5 rounded-full bg-accent text-surface hover:bg-accent-hover text-xs font-semibold flex items-center gap-1 transition-all shadow-2xs"
+              className="h-7 px-2.5 rounded-full bg-accent text-surface hover:bg-accent-hover text-xs font-semibold flex items-center gap-1 transition-all shadow-2xs whitespace-nowrap flex-shrink-0"
               title="Log in to your account"
             >
-              <LogIn className="w-3.5 h-3.5" />
-              <span>Log in</span>
+              <LogIn className="w-3.5 h-3.5 flex-shrink-0" />
+              <span className="whitespace-nowrap">Log in</span>
             </Link>
           )}
         </div>
