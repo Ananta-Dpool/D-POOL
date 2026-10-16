@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, MessageSquare, Plus, User } from "lucide-react";
+import { Home, MessageSquare, PlusSquare, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function BottomNav() {
@@ -10,7 +10,7 @@ export function BottomNav() {
 
   const navItems = [
     { label: "Home", href: "/", icon: Home },
-    { label: "Sell", href: "/sell", icon: Plus, isButton: true },
+    { label: "Sell", href: "/sell", icon: PlusSquare },
     { label: "Chats", href: "/chats", icon: MessageSquare, hasBadge: true },
     { label: "Profile", href: "/profile", icon: User },
   ];
@@ -20,21 +20,6 @@ export function BottomNav() {
       {navItems.map((item) => {
         const isActive = pathname === item.href;
         const Icon = item.icon;
-
-        if (item.isButton) {
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="flex items-center justify-center -mt-3"
-            >
-              <div className="h-10 px-4 rounded-full bg-accent text-surface flex items-center gap-1.5 shadow-md hover:bg-accent-hover transition-transform active:scale-95 text-xs font-semibold">
-                <Plus className="w-4 h-4 stroke-[2.5]" />
-                <span>Sell</span>
-              </div>
-            </Link>
-          );
-        }
 
         return (
           <Link

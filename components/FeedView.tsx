@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { SlidersHorizontal, Sparkles, X } from "lucide-react";
+import { SlidersHorizontal, X } from "lucide-react";
 import { Listing } from "@/lib/types/database";
 import { ListingCard } from "./ListingCard";
 import {
@@ -166,17 +166,6 @@ export function FeedView({ initialListings, searchQuery }: FeedViewProps) {
           </button>
         </div>
       )}
-
-      {/* Campus Wanted Ticker */}
-      <div className="bg-accent-tint/20 border-b border-border/60 px-4 py-1.5 flex items-center gap-2 text-xs overflow-hidden">
-        <Sparkles className="w-3 h-3 text-accent flex-shrink-0" />
-        <div className="text-[11px] text-ink truncate">
-          <span className="font-semibold text-accent mr-1">Campus Wanted:</span>
-          <span className="text-ink-sec">
-            Pooja wants Casio 991ES • Rahul needs A2 drafter • Sneha wants fairy lights
-          </span>
-        </div>
-      </div>
 
       {/* Listing Feed */}
       <div className="divide-y divide-border/60 pb-20">
