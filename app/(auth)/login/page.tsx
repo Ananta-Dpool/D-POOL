@@ -33,10 +33,14 @@ export default function LoginPage() {
 
     try {
       setIsSubmitting(true);
-      await login(email, password);
-      router.push("/");
-    } catch {
-      setError("Unable to log in. Please check your credentials.");
+      const res = await login(email, password);
+      if (res.success) {
+        router.push("/");
+      } else {
+        setError(res.error || "Unable to log in. Please check your credentials.");
+      }
+    } catch (err: any) {
+      setError(err?.message || "Unable to log in. Please check your credentials.");
     } finally {
       setIsSubmitting(false);
     }

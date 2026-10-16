@@ -58,15 +58,20 @@ export default function SignupPage() {
 
     try {
       setIsSubmitting(true);
-      await signup({
+      const res = await signup({
         email,
         name,
         password,
         whatsappNumber: whatsapp || undefined,
       });
-      router.push("/");
-    } catch {
-      setError("Unable to create account. Please try again.");
+
+      if (res.success) {
+        router.push("/");
+      } else {
+        setError(res.error || "Unable to create account. Please try again.");
+      }
+    } catch (err: any) {
+      setError(err?.message || "Unable to create account. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

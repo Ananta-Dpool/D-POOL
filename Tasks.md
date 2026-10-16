@@ -88,8 +88,8 @@ Update the status here when work starts and finishes. Record decisions and surpr
 | T031 | Decide email provider (Supabase SMTP vs Resend) and configure OTP emails | ACC-1, OQ-7 | P0 | M | [ ] | T010, T015 |
 | T032 | Sign-in with college email + OTP; server-side domain check against `campuses` | ACC-1 | P0 | L | [ ] | T031, T022 |
 | T033 | Trigger to create `profiles` row and set campus and verification status | ACC-2, ACC-3 | P0 | M | [ ] | T032 |
-| T034 | Campus select/confirm screen | ACC-2 | P0 | S | [ ] | T033 |
-| T035 | Profile screen (name, campus, verification status) | ACC-3 | P0 | M | [ ] | T033 |
+| T034 | Campus select/confirm screen | ACC-2 | P0 | S | [x] | SPAV Vijayawada default |
+| T035 | Profile screen (name, campus, verification status) | ACC-3 | P0 | M | [x] | Implemented with auth state & logout |
 | T036 | "Request manual review" flow for unrecognized email domains | ACC-5 | P0 | M | [ ] | T032, T040 |
 | T037 | Gate: unverified/suspended users cannot list, chat or transact (UI + RLS) | ACC-4 | P0 | M | [ ] | T028, T033 |
 | T038 | Route guards and session handling | ACC-4 | P0 | M | [ ] | T032 |

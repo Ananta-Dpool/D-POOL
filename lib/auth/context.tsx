@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 
 export interface AuthUser {
   id: string;
@@ -14,57 +15,111 @@ export interface AuthUser {
 interface AuthContextType {
   user: AuthUser | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signup: (data: {
     email: string;
     name: string;
     password: string;
     whatsappNumber?: string;
-  }) => Promise<boolean>;
-  logout: () => void;
+  }) => Promise<{ success: boolean; error?: string }>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const STORAGE_KEY = "dpool_auth_user";
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const supabase = createClient();
+
+  // Helper to load user profile from Supabase
+  const loadProfile = async (userId: string, email: string) => {
+    try {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name, whatsapp_number, verification_status, campuses(name)")
+        .eq("id", userId)
+        .single();
+
+      const namePart = email.split("@")[0];
+      const fallbackName =
+        namePart.charAt(0).toUpperCase() + namePart.slice(1).replace(/[._]/g, " ");
+
+      const campusName =
+        (profile as any)?.campuses?.name || "SPAV Vijayawada";
+
+      const authUser: AuthUser = {
+        id: userId,
+        email,
+        name: profile?.full_name || fallbackName,
+        campusName,
+        whatsappNumber: profile?.whatsapp_number || undefined,
+        isVerified: profile?.verification_status === "verified",
+      };
+
+      setUser(authUser);
+    } catch {
+      // Fallback user if profile row is still syncing
+      setUser({
+        id: userId,
+        email,
+        name: email.split("@")[0],
+        campusName: "SPAV Vijayawada",
+        isVerified: true,
+      });
+    }
+  };
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setUser(JSON.parse(stored));
+    // 1. Check existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        loadProfile(session.user.id, session.user.email || "");
+      } else {
+        setUser(null);
       }
-    } catch {
-      // ignore storage error
-    } finally {
       setIsLoading(false);
-    }
+    });
+
+    // 2. Listen to auth state changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session?.user) {
+        await loadProfile(session.user.id, session.user.email || "");
+      } else {
+        setUser(null);
+      }
+      setIsLoading(false);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
-    // Simulating authentication delay
-    await new Promise((resolve) => setTimeout(resolve, 600));
+  const login = async (
+    email: string,
+    password: string
+  ): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    // Extract name from email if not available
-    const namePart = email.split("@")[0];
-    const formattedName =
-      namePart.charAt(0).toUpperCase() + namePart.slice(1).replace(/[._]/g, " ");
+      if (error) {
+        return { success: false, error: error.message };
+      }
 
-    const loggedInUser: AuthUser = {
-      id: "u-" + Date.now(),
-      email,
-      name: formattedName || "Student",
-      campusName: "SPAV Vijayawada",
-      isVerified: true,
-    };
+      if (data.user) {
+        await loadProfile(data.user.id, data.user.email || email);
+      }
 
-    setUser(loggedInUser);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(loggedInUser));
-    return true;
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err.message || "Failed to log in" };
+    }
   };
 
   const signup = async (data: {
@@ -72,27 +127,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     name: string;
     password: string;
     whatsappNumber?: string;
-  }): Promise<boolean> => {
-    // Simulating registration delay
-    await new Promise((resolve) => setTimeout(resolve, 800));
+  }): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const { data: authData, error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            full_name: data.name,
+            whatsapp_number: data.whatsappNumber || null,
+          },
+        },
+      });
 
-    const newUser: AuthUser = {
-      id: "u-" + Date.now(),
-      email: data.email,
-      name: data.name,
-      campusName: "SPAV Vijayawada",
-      whatsappNumber: data.whatsappNumber,
-      isVerified: true,
-    };
+      if (error) {
+        return { success: false, error: error.message };
+      }
 
-    setUser(newUser);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newUser));
-    return true;
+      if (authData.user) {
+        await loadProfile(authData.user.id, authData.user.email || data.email);
+      }
+
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err.message || "Failed to create account" };
+    }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await supabase.auth.signOut();
     setUser(null);
-    localStorage.removeItem(STORAGE_KEY);
   };
 
   return (

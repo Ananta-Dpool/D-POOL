@@ -6,10 +6,13 @@ import { FeedView } from "@/components/FeedView";
 import { BottomNav } from "@/components/BottomNav";
 import { SplashScreen } from "@/components/SplashScreen";
 import { SAMPLE_LISTINGS } from "@/lib/mock-data";
+import { getActiveListings } from "@/lib/supabase/listings";
+import { Listing } from "@/lib/types/database";
 
 export default function HomePage() {
   const [showSplash, setShowSplash] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [listings, setListings] = useState<Listing[]>(SAMPLE_LISTINGS);
 
   useEffect(() => {
     // Check if user already saw splash in current session
@@ -17,6 +20,13 @@ export default function HomePage() {
     if (hasSeen) {
       setShowSplash(false);
     }
+
+    // Fetch live listings from Supabase
+    getActiveListings().then((data) => {
+      if (data && data.length > 0) {
+        setListings(data);
+      }
+    });
   }, []);
 
   const handleSplashFinish = () => {
@@ -39,7 +49,7 @@ export default function HomePage() {
 
         {/* Live Marketplace Feed */}
         <FeedView
-          initialListings={SAMPLE_LISTINGS}
+          initialListings={listings}
           searchQuery={searchQuery}
         />
 
