@@ -97,13 +97,13 @@ export default function SignupPage() {
         <div className="bg-surface border border-border rounded-16px p-6 shadow-sm">
           {/* Header */}
           <div className="flex flex-col items-center text-center mb-5">
-            <div className="relative w-14 h-14 rounded-12px overflow-hidden border border-border shadow-2xs mb-2.5">
+            <div className="relative w-14 h-14 mb-2.5">
               <Image
                 src="/logo.jpg"
                 alt="D' POOL Logo"
                 fill
                 sizes="56px"
-                className="object-cover"
+                className="object-contain mix-blend-multiply"
               />
             </div>
             <h1 className="font-serif font-bold text-xl text-ink">Create Account</h1>

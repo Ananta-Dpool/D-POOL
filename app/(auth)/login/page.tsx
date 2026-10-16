@@ -66,13 +66,13 @@ export default function LoginPage() {
         <div className="bg-surface border border-border rounded-16px p-6 shadow-sm">
           {/* Logo & Heading */}
           <div className="flex flex-col items-center text-center mb-6">
-            <div className="relative w-16 h-16 rounded-12px overflow-hidden border border-border shadow-2xs mb-3">
+            <div className="relative w-16 h-16 mb-3">
               <Image
                 src="/logo.jpg"
                 alt="D' POOL Logo"
                 fill
                 sizes="64px"
-                className="object-cover"
+                className="object-contain mix-blend-multiply"
               />
             </div>
             <h1 className="font-serif font-bold text-xl text-ink">Welcome Back</h1>

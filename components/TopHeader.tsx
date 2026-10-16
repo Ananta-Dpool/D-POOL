@@ -46,14 +46,14 @@ export function TopHeader({
           className="flex items-center flex-shrink-0 hover:opacity-90 active:scale-95 transition-all"
           title="D' POOL Home"
         >
-          <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-border shadow-2xs bg-surface">
+          <div className="relative w-8 h-8">
             <Image
               src="/logo.jpg"
               alt="D' POOL"
               fill
               sizes="32px"
               priority
-              className="object-cover"
+              className="object-contain mix-blend-multiply"
             />
           </div>
         </Link>

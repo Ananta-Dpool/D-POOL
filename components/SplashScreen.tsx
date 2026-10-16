@@ -40,14 +40,14 @@ export function SplashScreen({ onFinish, durationMs = 1000 }: SplashScreenProps)
     >
       <div className="flex flex-col items-center animate-in fade-in zoom-in-95 duration-500">
         {/* D' POOL Logo */}
-        <div className="relative w-28 h-28 rounded-2xl overflow-hidden shadow-md border border-border bg-surface p-1">
+        <div className="relative w-28 h-28">
           <Image
             src="/logo.jpg"
             alt="D' POOL Logo"
             fill
             sizes="112px"
             priority
-            className="object-cover rounded-xl"
+            className="object-contain mix-blend-multiply"
           />
         </div>
 
